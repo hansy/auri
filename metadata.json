@@ -1,0 +1,7 @@
+{
+  "name": "Daily Dictation",
+  "description": "A calm, private, and disciplined daily language practice app focused on listening comprehension and spoken response.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
