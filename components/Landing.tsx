@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Language, CEFR, UserProfile } from '../types';
 import { LANGUAGES, CEFR_LEVELS } from '../constants';
@@ -20,7 +19,7 @@ const Landing: React.FC<LandingProps> = ({ onStart, user }) => {
   };
 
   const renderCTABox = () => (
-    <div className="w-full max-w-xl mx-auto md:mx-0 bg-white border border-stone-200 rounded-[2.5rem] p-8 md:p-10 shadow-xl flex flex-col items-center text-center relative z-10">
+    <div id="cta-box" className="w-full max-w-xl mx-auto md:mx-0 bg-white border border-stone-200 rounded-[2.5rem] p-8 md:p-10 shadow-xl flex flex-col items-center text-center relative z-10">
       {!user ? (
         <>
           {/* Language Selection */}
@@ -47,7 +46,7 @@ const Landing: React.FC<LandingProps> = ({ onStart, user }) => {
           <div className="w-full space-y-4 mb-10">
             <div className="flex items-center justify-center gap-2">
               <label className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">Proficiency Level</label>
-              <div className="relative group flex items-center">
+              <div className="relative flex items-center">
                 <button 
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
