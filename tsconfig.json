@@ -27,6 +27,12 @@
       ],
       "@dictation/shared/*": [
         "./packages/shared/*"
+      ],
+      "@dictation/emails": [
+        "./packages/emails/index.ts"
+      ],
+      "@dictation/emails/*": [
+        "./packages/emails/*"
       ]
     },
     "allowImportingTsExtensions": true,

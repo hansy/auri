@@ -32,11 +32,13 @@ export const generateLessonTask = task({
         });
 
         const lessonUrl = `${process.env.FRONTEND_URL}/lesson/${userId}`;
-        await sendEmail(
-            user.email,
-            `Today's Lesson: ${lessonJson.dictation.title}`,
-            `<p>Your lesson is ready! Click here to start: <a href="${lessonUrl}">${lessonUrl}</a></p>`
-        );
+        const { sendEmailTask } = await import("./sendEmail");
+        await sendEmailTask.trigger({
+            to: user.email,
+            template: "DailyLessonEmail",
+            props: { title: lessonJson.dictation.title, lessonUrl },
+        });
+
 
         return { success: true };
     },

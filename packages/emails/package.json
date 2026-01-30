@@ -1,0 +1,21 @@
+{
+  "name": "@dictation/emails",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "dev": "email dev -p 3002",
+    "export": "email export"
+  },
+  "dependencies": {
+    "@react-email/components": "0.0.32",
+    "@react-email/render": "1.0.4",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.10",
+    "react-email": "3.0.6",
+    "typescript": "^5"
+  }
+}

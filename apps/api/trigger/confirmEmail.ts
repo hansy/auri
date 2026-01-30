@@ -1,5 +1,5 @@
 import { task } from "@trigger.dev/sdk/v3";
-import { sendEmail } from "../services/resend";
+import { sendEmailTask } from "./sendEmail";
 
 export const confirmEmailTask = task({
     id: "send-confirmation-email",
@@ -7,11 +7,11 @@ export const confirmEmailTask = task({
         const { email, token } = payload;
         const confirmUrl = `${process.env.FRONTEND_URL}/confirm?token=${token}`;
 
-        await sendEmail(
-            email,
-            "Confirm your Dictation subscription",
-            `<p>Please confirm your subscription by clicking here: <a href="${confirmUrl}">${confirmUrl}</a></p>`
-        );
+        await sendEmailTask.trigger({
+            to: email,
+            template: "ConfirmEmail",
+            props: { confirmUrl },
+        });
 
         return { success: true };
     },
