@@ -21,6 +21,12 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@dictation/shared": [
+        "./packages/shared/index.ts"
+      ],
+      "@dictation/shared/*": [
+        "./packages/shared/*"
       ]
     },
     "allowImportingTsExtensions": true,

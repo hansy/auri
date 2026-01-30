@@ -13,9 +13,39 @@ const Landing: React.FC<LandingProps> = ({ onStart, user }) => {
   const [selectedLevel, setSelectedLevel] = useState<CEFR>(CEFR.B1);
   const [email, setEmail] = useState('');
   const [showTooltip, setShowTooltip] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSubscribe = async () => {
+    if (!email) {
+      alert('Please enter your email');
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('http://localhost:3001/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          language: selectedLanguage,
+          level: selectedLevel,
+        }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        alert(result.message);
+      } else {
+        alert('Error: ' + result.error);
+      }
+    } catch (e) {
+      alert('Failed to connect to server');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const renderCTABox = () => (
@@ -30,11 +60,10 @@ const Landing: React.FC<LandingProps> = ({ onStart, user }) => {
                 <button
                   key={lang}
                   onClick={() => setSelectedLanguage(lang)}
-                  className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedLanguage === lang 
-                      ? 'bg-stone-900 text-white' 
+                  className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${selectedLanguage === lang
+                      ? 'bg-stone-900 text-white'
                       : 'bg-stone-50 text-stone-600 border border-stone-100 hover:border-stone-300'
-                  }`}
+                    }`}
                 >
                   {lang}
                 </button>
@@ -47,7 +76,7 @@ const Landing: React.FC<LandingProps> = ({ onStart, user }) => {
             <div className="flex items-center justify-center gap-2">
               <label className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">Proficiency Level</label>
               <div className="relative flex items-center">
-                <button 
+                <button
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
                   className="text-stone-300 hover:text-stone-500 transition-colors cursor-help"
@@ -68,11 +97,10 @@ const Landing: React.FC<LandingProps> = ({ onStart, user }) => {
                 <button
                   key={lvl}
                   onClick={() => setSelectedLevel(lvl)}
-                  className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedLevel === lvl 
-                      ? 'bg-stone-900 text-white' 
+                  className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${selectedLevel === lvl
+                      ? 'bg-stone-900 text-white'
                       : 'bg-stone-50 text-stone-600 border border-stone-100 hover:border-stone-300'
-                  }`}
+                    }`}
                 >
                   {lvl}
                 </button>
@@ -82,18 +110,19 @@ const Landing: React.FC<LandingProps> = ({ onStart, user }) => {
 
           {/* Email Input + Button Group */}
           <div className="w-full flex flex-col sm:flex-row gap-2">
-            <input 
-              type="email" 
+            <input
+              type="email"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="flex-grow px-6 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-stone-900/5 focus:border-stone-900 transition-all text-stone-800 placeholder:text-stone-300"
             />
             <button
-              onClick={() => onStart(selectedLanguage, selectedLevel)}
-              className="group shrink-0 px-8 py-4 bg-stone-900 text-white rounded-2xl font-semibold hover:bg-stone-800 transition-all flex items-center justify-center gap-3 shadow-md active:translate-y-0.5"
+              onClick={handleSubscribe}
+              disabled={isSubmitting}
+              className="group shrink-0 px-8 py-4 bg-stone-900 text-white rounded-2xl font-semibold hover:bg-stone-800 transition-all flex items-center justify-center gap-3 shadow-md active:translate-y-0.5 disabled:opacity-50"
             >
-              <span>Get Started</span>
+              <span>{isSubmitting ? 'Subscribing...' : 'Subscribe'}</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
@@ -109,7 +138,7 @@ const Landing: React.FC<LandingProps> = ({ onStart, user }) => {
               <p className="font-semibold">{user.targetLanguage} • {user.level} Session</p>
             </div>
           </div>
-          
+
           <button
             onClick={() => onStart()}
             className="group relative w-full px-8 py-5 bg-stone-900 text-white rounded-2xl font-semibold text-lg hover:bg-stone-800 transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl active:translate-y-0.5"
@@ -125,14 +154,13 @@ const Landing: React.FC<LandingProps> = ({ onStart, user }) => {
 
   return (
     <div className="space-y-32 animate-in fade-in duration-1000">
-      {/* Hero Section */}
       <div className="flex flex-col md:flex-row md:items-center gap-12 md:gap-24 min-h-[60vh] py-12">
         <div className="flex-1 flex flex-col justify-center space-y-8">
           <h2 className="text-5xl md:text-7xl font-semibold leading-[1.1] text-stone-900 serif tracking-tight">
             Achieve fluency <br />through comprehension
           </h2>
           <p className="text-xl text-stone-500 leading-relaxed max-w-xl">
-            To learn a language you must first understand what you are hearing. 
+            To learn a language you must first understand what you are hearing.
             Daily Dictation helps train your ear through daily stories sent to your inbox.
           </p>
         </div>
@@ -142,7 +170,6 @@ const Landing: React.FC<LandingProps> = ({ onStart, user }) => {
         </div>
       </div>
 
-      {/* How it Works Section */}
       <div className="space-y-16 border-t border-stone-200 pt-24">
         <div className="text-center space-y-4">
           <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-stone-400">The Methodology</h3>
@@ -188,7 +215,6 @@ const Landing: React.FC<LandingProps> = ({ onStart, user }) => {
         </div>
       </div>
 
-      {/* Footer CTA */}
       <div className="pt-24 pb-24 flex flex-col items-center gap-12 border-t border-stone-200">
         <div className="text-center space-y-4 max-w-md">
           <h3 className="text-3xl font-semibold text-stone-900 serif">Train your ear daily</h3>
@@ -196,7 +222,7 @@ const Landing: React.FC<LandingProps> = ({ onStart, user }) => {
             Consistency is the only shortcut. Spend 15 minutes a day to achieve permanent fluency.
           </p>
         </div>
-        
+
         <button
           onClick={scrollToTop}
           className="group relative px-12 py-5 bg-stone-900 text-white rounded-2xl font-semibold text-lg hover:bg-stone-800 transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl active:translate-y-0.5"

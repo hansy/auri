@@ -4,6 +4,7 @@ import { UserProfile, Language, CEFR, LessonStep, LessonContent, ReflectionFeedb
 import { generateDailyLesson } from './services/gemini';
 import { DOMAINS } from './constants';
 import Landing from './components/Landing';
+import ConfirmStep from './components/ConfirmStep';
 import DictationStep from './components/DictationStep';
 import OralStep from './components/OralStep';
 import ReviewStep from './components/ReviewStep';
@@ -24,6 +25,13 @@ const App: React.FC = () => {
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
+
+    // Handle confirmation token from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    if (token) {
+      setCurrentStep(LessonStep.CONFIRM);
+    }
   }, []);
 
   const saveUser = (updatedUser: UserProfile) => {
@@ -38,10 +46,10 @@ const App: React.FC = () => {
       const level = selectedLevel || user?.level || CEFR.B1;
       const domainIndex = user?.domainIndex || 0;
       const domain = DOMAINS[domainIndex % DOMAINS.length];
-      
+
       const newLesson = await generateDailyLesson(language, level, domain);
       setLesson(newLesson);
-      
+
       if (!user) {
         saveUser({
           targetLanguage: language,
@@ -50,7 +58,7 @@ const App: React.FC = () => {
           domainIndex: 1 // Next domain
         });
       }
-      
+
       setCurrentStep(LessonStep.DICTATION);
     } catch (error) {
       console.error("Failed to start lesson", error);
@@ -79,7 +87,7 @@ const App: React.FC = () => {
     if (user) {
       const updatedUser = { ...user };
       const today = new Date().toISOString().split('T')[0];
-      
+
       if (user.lastCompletedDate !== today) {
         updatedUser.streak += 1;
         updatedUser.lastCompletedDate = today;
@@ -115,7 +123,17 @@ const App: React.FC = () => {
         {currentStep === LessonStep.LANDING && (
           <Landing onStart={handleStartLesson} user={user} />
         )}
-        
+
+        {currentStep === LessonStep.CONFIRM && (
+          <ConfirmStep
+            token={new URLSearchParams(window.location.search).get('token') || ''}
+            onComplete={() => {
+              window.history.replaceState({}, '', '/');
+              setCurrentStep(LessonStep.LANDING);
+            }}
+          />
+        )}
+
         {currentStep === LessonStep.DICTATION && lesson && (
           <DictationStep lesson={lesson} onComplete={nextStep} />
         )}

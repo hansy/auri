@@ -15,12 +15,14 @@ export enum CEFR {
 
 export enum LessonStep {
   LANDING = 'landing',
+  CONFIRM = 'confirm',
   DICTATION = 'dictation',
   ORAL_QA = 'oral_qa',
   REVIEW = 'review',
   REFLECTION = 'reflection',
   COMPLETION = 'completion'
 }
+
 
 export type Domain = 'personal' | 'public' | 'occupational';
 
