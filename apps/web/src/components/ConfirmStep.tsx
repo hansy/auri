@@ -62,7 +62,7 @@ const ConfirmStep: React.FC<ConfirmStepProps> = ({ token, onComplete }) => {
             {status === 'error' && (
                 <>
                     <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center text-red-600 mb-4">
-                        <CheckCircle2 className="w-12 h-12" /> {/* Should be an X icon but CheckCircle is imported */}
+                        <CheckCircle2 className="w-12 h-12" />
                     </div>
                     <h2 className="text-2xl font-semibold text-stone-900 serif">Oops! Something went wrong.</h2>
                     <p className="text-stone-500">{message}</p>

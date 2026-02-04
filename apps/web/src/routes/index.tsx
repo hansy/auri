@@ -1,20 +1,24 @@
-
-import React, { useState, useEffect } from 'react';
-import { UserProfile, Language, CEFR, LessonStep, LessonContent, ReflectionFeedback } from './types';
-import { generateDailyLesson } from './services/gemini';
-import { DOMAINS } from './constants';
-import Landing from './components/Landing';
-import ConfirmStep from './components/ConfirmStep';
-import DictationStep from './components/DictationStep';
-import OralStep from './components/OralStep';
-import ReviewStep from './components/ReviewStep';
-import ReflectionStep from './components/ReflectionStep';
-import CompletionStep from './components/CompletionStep';
+import { useState, useEffect } from 'react';
+import { createFileRoute } from '@tanstack/react-router';
+import { UserProfile, Language, CEFR, LessonStep, LessonContent, ReflectionFeedback } from '@dictation/shared/types';
+import { generateDailyLesson } from '../services/gemini';
+import { DOMAINS } from '@dictation/shared/constants';
+import Landing from '../components/Landing';
+import ConfirmStep from '../components/ConfirmStep';
+import DictationStep from '../components/DictationStep';
+import OralStep from '../components/OralStep';
+import ReviewStep from '../components/ReviewStep';
+import ReflectionStep from '../components/ReflectionStep';
+import CompletionStep from '../components/CompletionStep';
 import { Loader2 } from 'lucide-react';
+
+export const Route = createFileRoute('/')({
+  component: App,
+})
 
 const STORAGE_KEY = 'daily_dictation_user_v2';
 
-const App: React.FC = () => {
+function App() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [currentStep, setCurrentStep] = useState<LessonStep>(LessonStep.LANDING);
   const [lesson, setLesson] = useState<LessonContent | null>(null);
@@ -83,7 +87,7 @@ const App: React.FC = () => {
     }
   };
 
-  const handleReflectionComplete = (feedback: ReflectionFeedback) => {
+  const handleReflectionComplete = (_feedback: ReflectionFeedback) => {
     if (user) {
       const updatedUser = { ...user };
       const today = new Date().toISOString().split('T')[0];
@@ -162,6 +166,4 @@ const App: React.FC = () => {
       </footer>
     </main>
   );
-};
-
-export default App;
+}
