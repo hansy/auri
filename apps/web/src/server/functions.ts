@@ -8,18 +8,18 @@ import { generateLessonTask } from "./trigger/generateLesson";
 
 export const subscribeFn = createServerFn({ method: "POST" })
     .handler(async (ctx: any) => {
-        const { email, language, level } = ctx.data as { email: string; language: string; level: any };
+        const { email, language, level } = ctx.data as { email: string; language: string; level: string };
 
         try {
             // 1. Create or update user
             const [user] = await db.insert(users).values({
                 email,
                 targetLanguage: language,
-                level,
+                level: level as any,
                 isConfirmed: false,
             }).onConflictDoUpdate({
                 target: users.email,
-                set: { targetLanguage: language, level: level }
+                set: { targetLanguage: language, level: level as any, isConfirmed: false } // Reset confirmation if they re-subscribe
             }).returning();
 
             // 2. Generate confirmation token
@@ -41,11 +41,12 @@ export const subscribeFn = createServerFn({ method: "POST" })
 
             return { success: true, message: 'Check your inbox for confirmation' };
         } catch (e) {
-            return { success: false, error: (e as Error).message };
+            console.error('Subscription error:', e);
+            return { success: false, error: 'Failed to process subscription. Please try again later.' };
         }
     });
 
-export const confirmFn = createServerFn({ method: "GET" })
+export const getConfirmationDetailsFn = createServerFn({ method: "GET" })
     .handler(async (ctx: any) => {
         const { token } = ctx.data as { token: string };
 
@@ -58,9 +59,44 @@ export const confirmFn = createServerFn({ method: "GET" })
                 return { success: false, error: 'Invalid or expired token' };
             }
 
-            // Confirm user
+            const [user] = await db.select()
+                .from(users)
+                .where(eq(users.id, confirmation.userId));
+
+            if (!user) {
+                return { success: false, error: 'User not found' };
+            }
+
+            return {
+                success: true,
+                language: user.targetLanguage,
+                level: user.level,
+            };
+        } catch (e) {
+            console.error('Confirmation details error:', e);
+            return { success: false, error: 'Failed to load details. The link may be invalid.' };
+        }
+    });
+
+export const confirmFn = createServerFn({ method: "POST" })
+    .handler(async (ctx: any) => {
+        const { token, languageVariant } = ctx.data as { token: string; languageVariant: string };
+
+        try {
+            const [confirmation] = await db.select()
+                .from(emailConfirmations)
+                .where(eq(emailConfirmations.token, token));
+
+            if (!confirmation || confirmation.expiresAt < new Date()) {
+                return { success: false, error: 'Invalid or expired token' };
+            }
+
+            // Confirm user and save variant
             await db.update(users)
-                .set({ isConfirmed: true })
+                .set({
+                    isConfirmed: true,
+                    languageVariant: languageVariant
+                })
                 .where(eq(users.id, confirmation.userId));
 
             // Cleanup token
@@ -73,6 +109,7 @@ export const confirmFn = createServerFn({ method: "GET" })
 
             return { success: true, message: 'Email confirmed! Your first lesson is being prepared.' };
         } catch (e) {
-            return { success: false, error: (e as Error).message };
+            console.error('Confirmation error:', e);
+            return { success: false, error: 'Failed to confirm email. Please try again later.' };
         }
     });

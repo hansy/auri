@@ -3,6 +3,7 @@ import { Language, CEFR, UserProfile } from '@dictation/shared/types';
 import { LANGUAGES, CEFR_LEVELS } from '@dictation/shared/constants';
 import { Mail, ArrowRight, Sparkles, Info } from 'lucide-react';
 import { subscribeFn } from '../../server/functions';
+import { toast } from 'sonner';
 
 interface CTABoxProps {
     onStart: (lang?: Language, level?: CEFR) => void;
@@ -15,15 +16,16 @@ const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
     const [email, setEmail] = useState('');
     const [showTooltip, setShowTooltip] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const handleSubscribe = async () => {
         if (!email) {
-            alert('Please enter your email');
+            toast.error('Please enter your email');
             return;
         }
         setIsSubmitting(true);
         try {
-            const result = await subscribeFn({
+            const result = await (subscribeFn as any)({
                 data: {
                     email,
                     language: selectedLanguage,
@@ -31,12 +33,13 @@ const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
                 }
             });
             if (result.success) {
-                alert(result.message);
+                setIsSuccess(true);
+                toast.success('Subscription successful! Please check your email.');
             } else {
-                alert('Error: ' + (result as any).error);
+                toast.error('Error: ' + (result as any).error);
             }
         } catch (e) {
-            alert('Failed to connect to server');
+            toast.error('Failed to connect to server');
         } finally {
             setIsSubmitting(false);
         }
@@ -106,22 +109,34 @@ const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
                     </div>
 
                     {/* Email Input + Button Group */}
-                    <div className="w-full flex flex-col sm:flex-row gap-2">
-                        <input
-                            type="email"
-                            placeholder="you@example.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="flex-grow px-6 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-stone-900/5 focus:border-stone-900 transition-all text-stone-800 placeholder:text-stone-300"
-                        />
-                        <button
-                            onClick={handleSubscribe}
-                            disabled={isSubmitting}
-                            className="group shrink-0 px-8 py-4 bg-stone-900 text-white rounded-2xl font-semibold hover:bg-stone-800 transition-all flex items-center justify-center gap-3 shadow-md active:translate-y-0.5 disabled:opacity-50"
-                        >
-                            <span>{isSubmitting ? 'Subscribing...' : 'Subscribe'}</span>
-                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                        </button>
+                    <div className="w-full">
+                        {isSuccess ? (
+                            <div className="p-6 bg-stone-50 border border-stone-200 rounded-2xl animate-in fade-in slide-in-from-bottom-2 duration-500">
+                                <div className="w-12 h-12 bg-stone-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <Sparkles className="w-6 h-6 text-white" />
+                                </div>
+                                <h4 className="text-xl font-light serif text-stone-800 mb-1">Check your inbox</h4>
+                                <p className="text-stone-400 text-sm font-medium">We sent a confirmation link to <span className="text-stone-600">{email}</span>. Click it to complete your subscription.</p>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col sm:flex-row gap-2">
+                                <input
+                                    type="email"
+                                    placeholder="you@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="flex-grow px-6 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-stone-900/5 focus:border-stone-900 transition-all text-stone-800 placeholder:text-stone-300"
+                                />
+                                <button
+                                    onClick={handleSubscribe}
+                                    disabled={isSubmitting}
+                                    className="group shrink-0 px-8 py-4 bg-stone-900 text-white rounded-2xl font-semibold hover:bg-stone-800 transition-all flex items-center justify-center gap-3 shadow-md active:translate-y-0.5 disabled:opacity-50"
+                                >
+                                    <span>{isSubmitting ? 'Subscribing...' : 'Subscribe'}</span>
+                                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </>
             ) : (

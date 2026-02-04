@@ -15,6 +15,13 @@ export const CEFR_LEVELS = [
   CEFR.C1
 ];
 
+export const LANGUAGE_VARIANTS: Record<Language, string[]> = {
+  [Language.ENGLISH]: ['Standard English', 'US English', 'UK English', 'Australian English'],
+  [Language.SPANISH]: ['Standard Spanish', 'Spain Spanish', 'Mexican Spanish', 'Colombian Spanish', 'Argentine Spanish'],
+  [Language.FRENCH]: ['Standard French', 'France French', 'Canadian French'],
+  [Language.GERMAN]: ['Standard German'],
+};
+
 export const DOMAINS: ('personal' | 'public' | 'occupational')[] = ['personal', 'public', 'occupational'];
 
 export const FRAMEWORK_SYSTEM_PROMPT = `

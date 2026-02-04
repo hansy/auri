@@ -7,6 +7,7 @@ export const users = pgTable('users', {
     email: text('email').notNull().unique(),
     targetLanguage: text('target_language').notNull(),
     level: levelEnum('level').notNull(),
+    languageVariant: text('language_variant'),
     streak: integer('streak').default(0).notNull(),
     domainIndex: integer('domain_index').default(0).notNull(),
     isConfirmed: boolean('is_confirmed').default(false).notNull(),

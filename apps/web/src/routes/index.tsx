@@ -4,7 +4,6 @@ import { UserProfile, Language, CEFR, LessonStep, LessonContent, ReflectionFeedb
 import { generateDailyLesson } from '../services/gemini';
 import { DOMAINS } from '@dictation/shared/constants';
 import Landing from '../components/Landing';
-import ConfirmStep from '../components/ConfirmStep';
 import DictationStep from '../components/DictationStep';
 import OralStep from '../components/OralStep';
 import ReviewStep from '../components/ReviewStep';
@@ -30,13 +29,6 @@ function App() {
     const savedUser = localStorage.getItem(STORAGE_KEY);
     if (savedUser) {
       setUser(JSON.parse(savedUser));
-    }
-
-    // Handle confirmation token from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    if (token) {
-      setCurrentStep(LessonStep.CONFIRM);
     }
   }, []);
 
@@ -121,16 +113,6 @@ function App() {
       <div className="flex-grow">
         {currentStep === LessonStep.LANDING && (
           <Landing onStart={handleStartLesson} user={user} />
-        )}
-
-        {currentStep === LessonStep.CONFIRM && (
-          <ConfirmStep
-            token={new URLSearchParams(window.location.search).get('token') || ''}
-            onComplete={() => {
-              window.history.replaceState({}, '', '/');
-              setCurrentStep(LessonStep.LANDING);
-            }}
-          />
         )}
 
         {currentStep === LessonStep.DICTATION && lesson && (

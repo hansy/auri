@@ -10,33 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UsersConfirmTokenRouteImport } from './routes/users/confirm.$token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UsersConfirmTokenRoute = UsersConfirmTokenRouteImport.update({
+  id: '/users/confirm/$token',
+  path: '/users/confirm/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/users/confirm/$token': typeof UsersConfirmTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/users/confirm/$token': typeof UsersConfirmTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/users/confirm/$token': typeof UsersConfirmTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/users/confirm/$token'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/users/confirm/$token'
+  id: '__root__' | '/' | '/users/confirm/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  UsersConfirmTokenRoute: typeof UsersConfirmTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +58,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/users/confirm/$token': {
+      id: '/users/confirm/$token'
+      path: '/users/confirm/$token'
+      fullPath: '/users/confirm/$token'
+      preLoaderRoute: typeof UsersConfirmTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  UsersConfirmTokenRoute: UsersConfirmTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
