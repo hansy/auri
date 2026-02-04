@@ -10,6 +10,8 @@ import OralStep from '../components/OralStep';
 import ReviewStep from '../components/ReviewStep';
 import ReflectionStep from '../components/ReflectionStep';
 import CompletionStep from '../components/CompletionStep';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { Loader2 } from 'lucide-react';
 
 export const Route = createFileRoute('/')({
@@ -113,15 +115,8 @@ function App() {
   }
 
   return (
-    <main className="max-w-2xl mx-auto min-h-screen px-6 py-12 md:py-24 flex flex-col">
-      <header className="mb-12 flex justify-between items-center">
-        <h1 className="text-xl font-medium tracking-tight text-stone-800">Daily Dictation</h1>
-        {user && (
-          <div className="text-sm font-medium text-stone-400">
-            STREAK: {user.streak}d
-          </div>
-        )}
-      </header>
+    <main className="max-w-6xl mx-auto min-h-screen px-6 py-12 md:py-24 flex flex-col">
+      <Header user={user} />
 
       <div className="flex-grow">
         {currentStep === LessonStep.LANDING && (
@@ -159,11 +154,7 @@ function App() {
         )}
       </div>
 
-      <footer className="mt-12 pt-8 border-t border-stone-200 text-center">
-        <p className="text-xs text-stone-300 font-medium uppercase tracking-widest">
-          Ritual Over Gamification • Privacy By Default
-        </p>
-      </footer>
+      <Footer />
     </main>
   );
 }

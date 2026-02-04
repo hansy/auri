@@ -1,27 +1,21 @@
-import { Link } from '@tanstack/react-router'
+import React from 'react';
+import { UserProfile } from '@dictation/shared/types';
 
-import './Header.css'
-
-export default function Header() {
-  return (
-    <header className="header">
-      <nav className="nav">
-        <div className="nav-item">
-          <Link to="/">Home</Link>
-        </div>
-
-        <div className="px-2 font-bold">
-          <Link to="/demo/start/server-funcs">Start - Server Functions</Link>
-        </div>
-
-        <div className="px-2 font-bold">
-          <Link to="/demo/start/api-request">Start - API Request</Link>
-        </div>
-
-        <div className="px-2 font-bold">
-          <Link to="/demo/start/ssr">Start - SSR Demos</Link>
-        </div>
-      </nav>
-    </header>
-  )
+interface HeaderProps {
+    user: UserProfile | null;
 }
+
+const Header: React.FC<HeaderProps> = ({ user }) => {
+    return (
+        <header className="mb-12 flex justify-between items-center">
+            <h1 className="text-xl font-medium tracking-tight text-stone-800">Daily Dictation</h1>
+            {user && (
+                <div className="text-sm font-medium text-stone-400">
+                    STREAK: {user.streak}d
+                </div>
+            )}
+        </header>
+    );
+};
+
+export default Header;
