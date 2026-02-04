@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Language, CEFR, UserProfile } from '@dictation/shared/types';
 import { LANGUAGES, CEFR_LEVELS } from '@dictation/shared/constants';
 import { Mail, ArrowRight, Sparkles, Info } from 'lucide-react';
+import { subscribeFn } from '../../server/functions';
 
 interface CTABoxProps {
     onStart: (lang?: Language, level?: CEFR) => void;
@@ -22,20 +23,17 @@ const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
         }
         setIsSubmitting(true);
         try {
-            const response = await fetch('http://localhost:3001/api/subscribe', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
+            const result = await subscribeFn({
+                data: {
                     email,
                     language: selectedLanguage,
                     level: selectedLevel,
-                }),
+                }
             });
-            const result = await response.json();
             if (result.success) {
                 alert(result.message);
             } else {
-                alert('Error: ' + result.error);
+                alert('Error: ' + (result as any).error);
             }
         } catch (e) {
             alert('Failed to connect to server');

@@ -4,7 +4,6 @@ import { users, lessons } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { generateLessonJson } from "../services/gemini";
 import { textToSpeech } from "../services/elevenlabs";
-import { sendEmail } from "../services/resend";
 import { DOMAINS } from "@dictation/shared";
 
 

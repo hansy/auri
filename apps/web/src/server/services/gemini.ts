@@ -1,6 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { Language, CEFR, LessonJSON, Domain } from "../../types";
-import { FRAMEWORK_SYSTEM_PROMPT, LESSON_DEVELOPER_PROMPT } from "../../constants";
+import { Language, CEFR, LessonJSON, Domain, FRAMEWORK_SYSTEM_PROMPT, LESSON_DEVELOPER_PROMPT } from "@dictation/shared";
 
 const getAI = () => {
     if (!process.env.GEMINI_API_KEY) {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CheckCircle2, Loader2, ArrowRight } from 'lucide-react';
+import { confirmFn } from '../../server/functions';
 
 interface ConfirmStepProps {
     token: string;
@@ -13,14 +14,15 @@ const ConfirmStep: React.FC<ConfirmStepProps> = ({ token, onComplete }) => {
     useEffect(() => {
         const confirmEmail = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/api/confirm?token=${token}`);
-                const result = await response.json();
+                const result = await confirmFn({
+                    data: { token }
+                });
                 if (result.success) {
                     setStatus('success');
                     setMessage(result.message);
                 } else {
                     setStatus('error');
-                    setMessage(result.error);
+                    setMessage((result as any).error);
                 }
             } catch (e) {
                 setStatus('error');

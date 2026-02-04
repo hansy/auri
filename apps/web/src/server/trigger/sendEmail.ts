@@ -42,4 +42,3 @@ export const sendEmailTask = task({
         return { success: true };
     },
 });
-
