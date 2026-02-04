@@ -1,3 +1,4 @@
+@import 'tailwindcss';
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Inter:wght@300;400;500;600&display=swap');
 
 body {
@@ -9,7 +10,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, .serif {
+h1,
+h2,
+h3,
+.serif {
   font-family: 'Crimson Pro', serif;
 }
 
