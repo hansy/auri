@@ -1,0 +1,95 @@
+[
+    {
+        "id": "english",
+        "name": "English",
+        "flag": "🇺🇸",
+        "variants": [
+            {
+                "name": "United Kingdom",
+                "flag": "🇬🇧"
+            },
+            {
+                "name": "USA",
+                "flag": "🇺🇸"
+            }
+        ]
+    },
+    {
+        "id": "spanish",
+        "name": "Spanish",
+        "flag": "🇪🇸",
+        "variants": [
+            {
+                "name": "Latin America",
+                "flag": "🌎"
+            },
+            {
+                "name": "Spain",
+                "flag": "🇪🇸"
+            }
+        ]
+    },
+    {
+        "id": "french",
+        "name": "French",
+        "flag": "🇫🇷",
+        "variants": []
+    },
+    {
+        "id": "german",
+        "name": "German",
+        "flag": "🇩🇪",
+        "variants": []
+    },
+    {
+        "id": "russian",
+        "name": "Russian",
+        "flag": "🇷🇺",
+        "variants": []
+    },
+    {
+        "id": "swedish",
+        "name": "Swedish",
+        "flag": "🇸🇪",
+        "variants": []
+    },
+    {
+        "id": "dutch",
+        "name": "Dutch",
+        "flag": "🇳🇱",
+        "variants": []
+    },
+    {
+        "id": "finnish",
+        "name": "Finnish",
+        "flag": "🇫🇮",
+        "variants": []
+    },
+    {
+        "id": "portuguese",
+        "name": "Portuguese",
+        "flag": "🇵🇹",
+        "variants": [
+            {
+                "name": "Portugal",
+                "flag": "🇵🇹"
+            },
+            {
+                "name": "Brazil",
+                "flag": "🇧🇷"
+            }
+        ]
+    },
+    {
+        "id": "indonesian",
+        "name": "Indonesian",
+        "flag": "🇮🇩",
+        "variants": []
+    },
+    {
+        "id": "italian",
+        "name": "Italian",
+        "flag": "🇮🇹",
+        "variants": []
+    }
+]

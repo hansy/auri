@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Language, CEFR, UserProfile } from '@auri/shared/types';
-import { LANGUAGES, CEFR_LEVELS } from '@auri/shared/constants';
+import { CEFR_LEVELS } from '@auri/shared/constants';
 import { Mail, ArrowRight, Sparkles, Info } from 'lucide-react';
 import { subscribeFn } from '../../server/functions';
 import { toast } from 'sonner';
+
+import { LanguageSelector } from '../LanguageSelector';
 
 interface CTABoxProps {
     onStart: (lang?: Language, level?: CEFR) => void;
@@ -12,6 +14,7 @@ interface CTABoxProps {
 
 const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
     const [selectedLanguage, setSelectedLanguage] = useState<Language>(Language.ENGLISH);
+    const [selectedVariant, setSelectedVariant] = useState<string>('');
     const [selectedLevel, setSelectedLevel] = useState<CEFR>(CEFR.B1);
     const [email, setEmail] = useState('');
     const [showTooltip, setShowTooltip] = useState(false);
@@ -50,23 +53,14 @@ const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
             {!user ? (
                 <>
                     {/* Language Selection */}
-                    <div className="w-full space-y-4 mb-8">
-                        <label className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400 block">Target Language</label>
-                        <div className="flex flex-wrap justify-center gap-2">
-                            {LANGUAGES.map(lang => (
-                                <button
-                                    key={lang}
-                                    type="button"
-                                    onClick={() => setSelectedLanguage(lang)}
-                                    className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${selectedLanguage === lang
-                                        ? 'bg-stone-900 text-white'
-                                        : 'bg-stone-50 text-stone-600 border border-stone-100 hover:border-stone-300'
-                                        }`}
-                                >
-                                    {lang}
-                                </button>
-                            ))}
-                        </div>
+                    <div className="w-full mb-8">
+                        <LanguageSelector
+                            selectedLanguage={selectedLanguage}
+                            onLanguageChange={setSelectedLanguage}
+                            selectedVariant={selectedVariant}
+                            onVariantChange={setSelectedVariant}
+                            hideVariant={true}
+                        />
                     </div>
 
                     {/* Proficiency Selection */}

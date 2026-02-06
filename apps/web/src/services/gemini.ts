@@ -1,5 +1,5 @@
 import { GoogleGenAI, Modality } from "@google/genai";
-import { Language, CEFR, LessonContent } from '@auri/shared/types';
+import { Language, CEFR, LessonContent, Domain, LessonJSON } from '@auri/shared/types';
 import { FRAMEWORK_SYSTEM_PROMPT, LESSON_DEVELOPER_PROMPT } from "@auri/shared/constants";
 
 // Always use the direct process.env.API_KEY for initialization as per guidelines

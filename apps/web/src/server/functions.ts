@@ -81,9 +81,9 @@ export const getConfirmationDetailsFn = createServerFn({ method: "GET" })
     });
 
 export const confirmFn = createServerFn({ method: "POST" })
-    .inputValidator((data: { token: string; languageVariant?: string }) => data)
+    .inputValidator((data: { token: string; targetLanguage?: string; languageVariant?: string }) => data)
     .handler(async (ctx) => {
-        const { token, languageVariant } = ctx.data;
+        const { token, targetLanguage, languageVariant } = ctx.data;
 
         try {
             const [confirmation] = await db.select()
@@ -98,6 +98,7 @@ export const confirmFn = createServerFn({ method: "POST" })
             await db.update(users)
                 .set({
                     isConfirmed: true,
+                    targetLanguage: targetLanguage,
                     languageVariant: languageVariant
                 })
                 .where(eq(users.id, confirmation.userId));

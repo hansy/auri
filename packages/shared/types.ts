@@ -3,7 +3,14 @@ export enum Language {
   ENGLISH = 'English',
   SPANISH = 'Spanish',
   FRENCH = 'French',
-  GERMAN = 'German'
+  GERMAN = 'German',
+  RUSSIAN = 'Russian',
+  SWEDISH = 'Swedish',
+  DUTCH = 'Dutch',
+  FINNISH = 'Finnish',
+  PORTUGUESE = 'Portuguese',
+  INDONESIAN = 'Indonesian',
+  ITALIAN = 'Italian'
 }
 
 export enum CEFR {

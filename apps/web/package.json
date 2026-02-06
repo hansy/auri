@@ -17,6 +17,7 @@
     "@elevenlabs/elevenlabs-js": "^2.34.0",
     "@google/genai": "^1.38.0",
     "@neondatabase/serverless": "^1.0.2",
+    "@radix-ui/react-select": "^2.2.6",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-router": "^1.132.0",
     "@tanstack/react-router-devtools": "^1.132.0",

@@ -1,12 +1,8 @@
 
 import { Language, CEFR } from './types';
+import { LANGUAGES_DATA } from './language-utils';
 
-export const LANGUAGES = [
-  Language.ENGLISH,
-  Language.SPANISH,
-  Language.FRENCH,
-  Language.GERMAN
-];
+export const LANGUAGES = LANGUAGES_DATA.map(l => l.name as Language);
 
 export const CEFR_LEVELS = [
   CEFR.A2,
@@ -15,12 +11,10 @@ export const CEFR_LEVELS = [
   CEFR.C1
 ];
 
-export const LANGUAGE_VARIANTS: Record<Language, string[]> = {
-  [Language.ENGLISH]: ['Standard English', 'US English', 'UK English', 'Australian English'],
-  [Language.SPANISH]: ['Standard Spanish', 'Spain Spanish', 'Mexican Spanish', 'Colombian Spanish', 'Argentine Spanish'],
-  [Language.FRENCH]: ['Standard French', 'France French', 'Canadian French'],
-  [Language.GERMAN]: ['Standard German'],
-};
+export const LANGUAGE_VARIANTS: Record<Language, string[]> = LANGUAGES_DATA.reduce((acc, l) => {
+  acc[l.name as Language] = l.variants.map(v => v.name);
+  return acc;
+}, {} as Record<Language, string[]>);
 
 export const DOMAINS: ('personal' | 'public' | 'occupational')[] = ['personal', 'public', 'occupational'];
 
