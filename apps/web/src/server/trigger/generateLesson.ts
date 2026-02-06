@@ -1,15 +1,15 @@
 import { task } from "@trigger.dev/sdk/v3";
-import { db } from "../db/index";
-import { users, lessons } from "../db/schema";
-import { eq } from "drizzle-orm";
-import { generateLessonJson } from "../services/gemini";
-import { textToSpeech } from "../services/elevenlabs";
-import { DOMAINS } from "@dictation/shared";
+// import { db } from "../db/index";
+// import { users, lessons } from "../db/schema";
+// import { eq } from "drizzle-orm";
+// import { generateLessonJson } from "../services/gemini";
+// import { textToSpeech } from "../services/elevenlabs";
+// import { DOMAINS } from "@dictation/shared";
 
 
 export const generateLessonTask = task({
     id: "generate-daily-lesson",
-    run: async (payload: { userId: string }) => {
+    run: async (_payload: { userId: string }) => {
         // const { userId } = payload;
 
         // const [user] = await db.select().from(users).where(eq(users.id, userId));

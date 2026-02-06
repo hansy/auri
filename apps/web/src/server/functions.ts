@@ -7,8 +7,9 @@ import { confirmEmailTask } from "./trigger/confirmEmail";
 import { generateLessonTask } from "./trigger/generateLesson";
 
 export const subscribeFn = createServerFn({ method: "POST" })
-    .handler(async (ctx: any) => {
-        const { email, language, level } = ctx.data as { email: string; language: string; level: string };
+    .inputValidator((data: { email: string; language: string; level: string }) => data)
+    .handler(async (ctx) => {
+        const { email, language, level } = ctx.data;
 
         try {
             // 1. Create or update user
@@ -47,8 +48,9 @@ export const subscribeFn = createServerFn({ method: "POST" })
     });
 
 export const getConfirmationDetailsFn = createServerFn({ method: "GET" })
-    .handler(async (ctx: any) => {
-        const { token } = ctx.data as { token: string };
+    .inputValidator((data: { token: string }) => data)
+    .handler(async (ctx) => {
+        const { token } = ctx.data;
 
         try {
             const [confirmation] = await db.select()
@@ -79,8 +81,9 @@ export const getConfirmationDetailsFn = createServerFn({ method: "GET" })
     });
 
 export const confirmFn = createServerFn({ method: "POST" })
-    .handler(async (ctx: any) => {
-        const { token, languageVariant } = ctx.data as { token: string; languageVariant: string };
+    .inputValidator((data: { token: string; languageVariant?: string }) => data)
+    .handler(async (ctx) => {
+        const { token, languageVariant } = ctx.data;
 
         try {
             const [confirmation] = await db.select()

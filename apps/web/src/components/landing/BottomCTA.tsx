@@ -5,7 +5,7 @@ interface BottomCTAProps {
     onStart: () => void;
 }
 
-const BottomCTA: React.FC<BottomCTAProps> = ({ onStart }) => {
+const BottomCTA: React.FC<BottomCTAProps> = ({ }) => {
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };

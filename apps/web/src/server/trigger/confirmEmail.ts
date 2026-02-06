@@ -5,7 +5,7 @@ export const confirmEmailTask = task({
     id: "send-confirmation-email",
     run: async (payload: { email: string; token: string }) => {
         const { email, token } = payload;
-        const confirmUrl = `${process.env.FRONTEND_URL}/users/confirm/${token}`;
+        const confirmUrl = `${process.env.VITE_HOST}/users/confirm/${token}`;
 
         await sendEmailTask.trigger({
             to: email,

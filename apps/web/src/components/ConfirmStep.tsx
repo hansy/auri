@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CheckCircle2, Loader2, ArrowRight } from 'lucide-react';
-import { confirmFn } from '../../server/functions';
+import { confirmFn } from '../server/functions';
 
 interface ConfirmStepProps {
     token: string;

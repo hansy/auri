@@ -1,60 +1,71 @@
-// import ElevenLabs from "elevenlabs-node";
+import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
 
-// // Note: elevenlabs-node might be tricky in Edge environments, but let's see.
-// // TanStack Start runs on server-side nodes by default in SSR.
+const ELEVEN_LABS_API_KEY = process.env.ELEVEN_LABS_API_KEY;
 
-// export const textToSpeech = async (text: string): Promise<Buffer> => {
-//     if (!process.env.ELEVEN_LABS_API_KEY) {
-//         throw new Error('ELEVEN_LABS_API_KEY is not set');
-//     }
+if (!ELEVEN_LABS_API_KEY) {
+    console.error("ELEVEN_LABS_API_KEY is not set in environment variables");
+}
 
-//     // Using the Eleven Multilingual v2 model for best quality
-//     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/jsCq9WUX7vUatWUNeb9o`, { // Default voice ID, can be parameterized
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//             "xi-api-key": process.env.ELEVEN_LABS_API_KEY,
-//         },
-//         body: JSON.stringify({
-//             text,
-//             model_id: "eleven_multilingual_v2",
-//             voice_settings: {
-//                 stability: 0.4,
-//                 similarity_boost: 0.8,
-//                 style_exaggeration: 0.2, // Subtle emphasis
-//                 use_speaker_boost: true, // Higher quality
-//             },
-//         }),
-//     });
+const client = new ElevenLabsClient({
+    apiKey: ELEVEN_LABS_API_KEY,
+});
 
+export const textToSpeech = async (text: string): Promise<Buffer> => {
+    if (!ELEVEN_LABS_API_KEY) {
+        throw new Error('ELEVEN_LABS_API_KEY is not set');
+    }
 
-//     if (!response.ok) {
-//         throw new Error(`ElevenLabs TTS failed: ${response.statusText}`);
-//     }
+    const response = await client.textToSpeech.convert("jsCq9WUX7vUatWUNeb9o", {
+        text,
+        modelId: "eleven_multilingual_v2",
+        voiceSettings: {
+            stability: 0.4,
+            similarityBoost: 0.8,
+            style: 0.2,
+            useSpeakerBoost: true,
+        },
+    });
 
-//     const arrayBuffer = await response.arrayBuffer();
-//     return Buffer.from(arrayBuffer);
-// };
+    const chunks: Uint8Array[] = [];
+    // The response is a ReadableStream<Uint8Array>
+    const reader = response.getReader();
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (value) chunks.push(value);
+    }
 
-// export const speechToText = async (audioBuffer: Buffer): Promise<string> => {
-//     const formData = new FormData();
-//     formData.append('file', new Blob([audioBuffer as any]), 'audio.wav');
+    // Combine chunks into a single Buffer
+    const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0);
+    const combined = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const chunk of chunks) {
+        combined.set(chunk, offset);
+        offset += chunk.length;
+    }
 
+    return Buffer.from(combined);
+};
 
-//     formData.append('model_id', 'scribe_v1'); // Fastest STT model
+export const speechToText = async (audioBuffer: Buffer): Promise<string> => {
+    if (!ELEVEN_LABS_API_KEY) {
+        throw new Error('ELEVEN_LABS_API_KEY is not set');
+    }
 
-//     const response = await fetch('https://api.elevenlabs.io/v1/speech-to-text', {
-//         method: 'POST',
-//         headers: {
-//             'xi-api-key': process.env.ELEVEN_LABS_API_KEY!,
-//         },
-//         body: formData,
-//     });
+    const blob = new Blob([new Uint8Array(audioBuffer)], { type: "audio/wav" });
+    const file = new File([blob], "audio.wav", { type: "audio/wav" });
 
-//     if (!response.ok) {
-//         throw new Error(`ElevenLabs STT failed: ${response.statusText}`);
-//     }
+    const result = await client.speechToText.convert({
+        file,
+        modelId: "scribe_v1",
+    });
 
-//     const result = await response.json();
-//     return result.text;
-// };
+    // result can be SpeechToTextChunkResponseModel, MultichannelSpeechToTextResponseModel, etc.
+    if ('text' in result) {
+        return result.text;
+    } else if ('transcripts' in result && result.transcripts.length > 0) {
+        return result.transcripts[0].text;
+    } else {
+        throw new Error("Failed to extract text from ElevenLabs STT response");
+    }
+};

@@ -9,7 +9,7 @@ import {
     Section,
     Text,
 } from "@react-email/components";
-import * as React from "react";
+// import * as React from "react";
 
 export interface ConfirmEmailProps {
     confirmUrl: string;

@@ -1,7 +1,6 @@
 import { task } from "@trigger.dev/sdk/v3";
 import { sendEmail } from "../services/resend";
-
-import * as React from "react";
+import { ReactNode } from "react";
 
 import { EMAIL_CONFIG } from "@dictation/shared";
 import {
@@ -21,23 +20,23 @@ export const sendEmailTask = task({
     run: async (payload: SendEmailPayload) => {
         const { to, template, props } = payload;
 
-        let reactElement: React.ReactNode = null;
+        let reactElement: ReactNode;
         let subject = payload.subject;
 
         switch (template) {
             case "ConfirmEmail":
-                reactElement = React.createElement(ConfirmEmail, props);
+                reactElement = ConfirmEmail(props);
                 subject = subject || EMAIL_CONFIG.subjects.ConfirmEmail;
                 break;
             case "DailyLessonEmail":
-                reactElement = React.createElement(DailyLessonEmail, props);
+                reactElement = DailyLessonEmail(props);
                 subject = subject || EMAIL_CONFIG.subjects.DailyLessonEmail(props.title);
                 break;
             default:
                 throw new Error(`Unknown email template: ${template}`);
         }
 
-        await sendEmail(to, subject, undefined, reactElement);
+        await sendEmail(to, subject, reactElement);
 
         return { success: true };
     },

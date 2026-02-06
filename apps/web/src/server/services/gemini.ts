@@ -5,28 +5,31 @@ const getAI = () => {
     if (!process.env.GEMINI_API_KEY) {
         throw new Error('GEMINI_API_KEY is not set');
     }
-    return new GoogleGenAI(process.env.GEMINI_API_KEY);
+    return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 };
 
 export const generateLessonJson = async (language: Language, level: CEFR, domain: Domain): Promise<LessonJSON> => {
     const ai = getAI();
-    const model = ai.getGenerativeModel({ model: "gemini-1.5-pro-latest" }); // Using a stable backend model
 
     const prompt = LESSON_DEVELOPER_PROMPT
         .replace('{language}', language)
         .replace('{level}', level)
         .replace('{domain}', domain);
 
-    const result = await model.generateContent({
+    const response = await ai.models.generateContent({
+        model: "gemini-1.5-pro-latest",
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        generationConfig: {
+        config: {
             responseMimeType: "application/json",
-        },
-        systemInstruction: FRAMEWORK_SYSTEM_PROMPT
+            systemInstruction: FRAMEWORK_SYSTEM_PROMPT
+        }
     });
 
     try {
-        return JSON.parse(result.response.text());
+        if (!response.text) {
+            throw new Error("Empty response from Gemini");
+        }
+        return JSON.parse(response.text);
     } catch (e) {
         throw new Error("Failed to parse lesson JSON: " + (e as Error).message);
     }
