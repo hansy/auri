@@ -1,6 +1,6 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 import { Language, CEFR, LessonContent } from '@auri/shared/types';
-import { FRAMEWORK_SYSTEM_PROMPT, LESSON_DEVELOPER_PROMPT } from "@dictation/shared/constants";
+import { FRAMEWORK_SYSTEM_PROMPT, LESSON_DEVELOPER_PROMPT } from "@auri/shared/constants";
 
 // Always use the direct process.env.API_KEY for initialization as per guidelines
 // For Vite/TanStack Start, we might need import.meta.env.VITE_GEMINI_API_KEY

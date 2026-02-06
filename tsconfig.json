@@ -22,16 +22,16 @@
       "@/*": [
         "./*"
       ],
-      "@dictation/shared": [
+      "@auri/shared": [
         "./packages/shared/index.ts"
       ],
-      "@dictation/shared/*": [
+      "@auri/shared/*": [
         "./packages/shared/*"
       ],
-      "@dictation/emails": [
+      "@auri/emails": [
         "./packages/emails/index.ts"
       ],
-      "@dictation/emails/*": [
+      "@auri/emails/*": [
         "./packages/emails/*"
       ]
     },

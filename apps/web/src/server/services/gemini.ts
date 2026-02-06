@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { Language, CEFR, LessonJSON, Domain } from "@dictation/shared";
+import { Language, CEFR, LessonJSON, Domain } from "@auri/shared";
 import { FRAMEWORK_SYSTEM_PROMPT, LESSON_DEVELOPER_PROMPT } from "@auri/shared/constants";
 
 const getAI = () => {
