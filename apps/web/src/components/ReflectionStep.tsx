@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ReflectionFeedback } from '@dictation/shared/types';
+import { ReflectionFeedback } from '@auri/shared/types';
 import { Smile, Meh, Frown, Send } from 'lucide-react';
 
 interface ReflectionStepProps {

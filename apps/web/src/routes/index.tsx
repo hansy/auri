@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import { UserProfile, Language, CEFR, LessonStep, LessonContent, ReflectionFeedback } from '@dictation/shared/types';
+import { UserProfile, Language, CEFR, LessonStep, LessonContent, ReflectionFeedback } from '@auri/shared/types';
 import { generateDailyLesson } from '../services/gemini';
-import { DOMAINS } from '@dictation/shared/constants';
+import { DOMAINS } from '@auri/shared/constants';
 import Landing from '../components/Landing';
 import DictationStep from '../components/DictationStep';
 import OralStep from '../components/OralStep';
@@ -17,7 +17,7 @@ export const Route = createFileRoute('/')({
   component: App,
 })
 
-const STORAGE_KEY = 'daily_dictation_user_v2';
+const STORAGE_KEY = 'auri_user_v1';
 
 function App() {
   const [user, setUser] = useState<UserProfile | null>(null);

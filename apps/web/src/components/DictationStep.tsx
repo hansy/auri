@@ -1,6 +1,6 @@
 
 import React, { useRef, useState, useEffect } from 'react';
-import { LessonContent } from '@dictation/shared/types';
+import { LessonContent } from '@auri/shared/types';
 import { Play, Pause, RotateCcw, Check, Info } from 'lucide-react';
 import { decodePCM, decodeAudioData } from '../services/gemini';
 

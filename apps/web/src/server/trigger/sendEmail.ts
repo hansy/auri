@@ -2,13 +2,13 @@ import { task } from "@trigger.dev/sdk/v3";
 import { sendEmail } from "../services/resend";
 import { ReactNode } from "react";
 
-import { EMAIL_CONFIG } from "@dictation/shared";
+import { EMAIL_CONFIG } from "@auri/shared";
 import {
     ConfirmEmail,
     ConfirmEmailProps,
     DailyLessonEmail,
     DailyLessonEmailProps
-} from "@dictation/emails";
+} from "@auri/emails";
 
 
 export type SendEmailPayload =

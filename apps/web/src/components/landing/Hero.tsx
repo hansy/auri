@@ -7,7 +7,7 @@ const Hero: React.FC = () => {
                 Achieve fluency by listening
             </h2>
             <p className="text-xl text-stone-500 leading-relaxed max-w-3xl">
-                To speak a language, you must first understand what is being said. Daily Dictation helps train your ear by sending you daily listening exercises.
+                To speak a language, you must first understand what is being said. auri helps train your ear by sending you daily listening exercises.
             </p>
         </div>
     );

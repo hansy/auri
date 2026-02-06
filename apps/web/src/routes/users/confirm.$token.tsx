@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { getConfirmationDetailsFn, confirmFn } from '../../server/functions';
-import { LANGUAGE_VARIANTS } from '@dictation/shared/constants';
-import { Language } from '@dictation/shared/types';
+import { LANGUAGE_VARIANTS } from '@auri/shared/constants';
+import { Language } from '@auri/shared/types';
 import { Loader2, CheckCircle2, AlertCircle, Globe, GraduationCap, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import Header from '../../components/Header';
@@ -111,7 +111,7 @@ function UserConfirmationPage() {
                     {status === 'ready' && details && (
                         <div className="space-y-10">
                             <div className="space-y-4">
-                                <h1 className="text-4xl font-light serif text-stone-800">Confirm Your Subscription</h1>
+                                <h1 className="text-4xl font-light serif text-stone-800">Confirm Your auri Subscription</h1>
                                 <p className="text-stone-400 font-medium">Almost there! Just a few quick preferences for your daily lessons.</p>
                             </div>
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Language, CEFR, UserProfile } from '@dictation/shared/types';
+import { Language, CEFR, UserProfile } from '@auri/shared/types';
 import Hero from './landing/Hero';
 import CTABox from './landing/CTABox';
 import Methodology from './landing/Methodology';

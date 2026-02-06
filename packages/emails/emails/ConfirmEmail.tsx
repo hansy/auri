@@ -18,10 +18,10 @@ export interface ConfirmEmailProps {
 export const ConfirmEmail = ({ confirmUrl }: ConfirmEmailProps) => (
     <Html>
         <Head />
-        <Preview>Confirm your Dictation subscription</Preview>
+        <Preview>Confirm your auri subscription</Preview>
         <Body style={main}>
             <Container style={container}>
-                <Heading style={h1}>Welcome to Dictation!</Heading>
+                <Heading style={h1}>Welcome to auri!</Heading>
                 <Text style={text}>
                     Please confirm your subscription by clicking the link below:
                 </Text>

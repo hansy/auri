@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { LessonContent } from '@dictation/shared/types';
+import { LessonContent } from '@auri/shared/types';
 import { BookOpen, CheckCircle2, ArrowRight } from 'lucide-react';
 
 interface ReviewStepProps {

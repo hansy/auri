@@ -10,7 +10,7 @@ export const sendEmail = async (to: string, subject: string, react: React.ReactN
     }
 
     const { data, error } = await resend.emails.send({
-        from: 'Dictation App <support@hearauri.com>',
+        from: 'auri <support@hearauri.com>',
         to: [to],
         subject,
         react,

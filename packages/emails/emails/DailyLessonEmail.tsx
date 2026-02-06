@@ -22,10 +22,10 @@ export const DailyLessonEmail = ({
 }: DailyLessonEmailProps) => (
     <Html>
         <Head />
-        <Preview>Your Daily Lesson: {title}</Preview>
+        <Preview>Your auri Lesson: {title}</Preview>
         <Body style={main}>
             <Container style={container}>
-                <Heading style={h1}>Today's Lesson: {title}</Heading>
+                <Heading style={h1}>Today's auri Lesson: {title}</Heading>
                 <Text style={text}>Your new lesson is ready! Take a few minutes to practice your listening and dictation.</Text>
                 <Section style={section}>
                     <Link style={link} href={lessonUrl}>

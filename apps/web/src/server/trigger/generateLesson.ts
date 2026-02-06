@@ -4,7 +4,7 @@ import { task } from "@trigger.dev/sdk/v3";
 // import { eq } from "drizzle-orm";
 // import { generateLessonJson } from "../services/gemini";
 // import { textToSpeech } from "../services/elevenlabs";
-// import { DOMAINS } from "@dictation/shared";
+// import { DOMAINS } from "@auri/shared";
 
 
 export const generateLessonTask = task({

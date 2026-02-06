@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Language, CEFR, UserProfile } from '@dictation/shared/types';
-import { LANGUAGES, CEFR_LEVELS } from '@dictation/shared/constants';
+import { Language, CEFR, UserProfile } from '@auri/shared/types';
+import { LANGUAGES, CEFR_LEVELS } from '@auri/shared/constants';
 import { Mail, ArrowRight, Sparkles, Info } from 'lucide-react';
 import { subscribeFn } from '../../server/functions';
 import { toast } from 'sonner';

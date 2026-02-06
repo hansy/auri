@@ -1,7 +1,7 @@
 export const EMAIL_CONFIG = {
     subjects: {
-        ConfirmEmail: "Confirm your Dictation subscription",
-        DailyLessonEmail: (title: string) => `Today's Lesson: ${title}`,
+        ConfirmEmail: "Confirm your auri subscription",
+        DailyLessonEmail: (title: string) => `Today's auri Lesson: ${title}`,
     },
-    from: "Dictation App <lessons@dictation-app.com>",
+    from: "auri <lessons@hearauri.com>",
 } as const;

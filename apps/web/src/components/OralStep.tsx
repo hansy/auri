@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { LessonContent } from '@dictation/shared/types';
+import { LessonContent } from '@auri/shared/types';
 import { GoogleGenAI, LiveServerMessage, Modality } from '@google/genai';
-import { SYSTEM_PROMPTS } from '@dictation/shared/constants';
+import { SYSTEM_PROMPTS } from '@auri/shared/constants';
 import { encodePCM, decodePCM, decodeAudioData } from '../services/gemini';
 import { Mic, MicOff, ArrowRight, Loader2 } from 'lucide-react';
 
