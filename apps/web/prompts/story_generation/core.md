@@ -94,16 +94,23 @@ question_plan: QuestionSpec[]
   "storySpec": { ... },
   "dictation": {
     "title": "...",
-    "speakers": ["Narrator" | "SpeakerA" | "SpeakerB"],
-    "script": "...",
-    "chunking": {
-      "chunks": ["...", "..."],
-      "pause_ms_between_chunks": 0
-    },
-    "audio": {
-      "target_wpm": 0,
-      "pauses_between_sentences_ms": 0
-    }
+    "is_dialogue": true | false,
+    "speakers": [
+      {
+        "id": "Narrator" | "SpeakerA" | "SpeakerB",
+        "gender": "male" | "female",
+        "voice_description": "...",
+        "stability": "creative" | "natural" | "robust"
+      }
+    ],
+    "segments": [
+      {
+        "speaker_id": "Narrator",
+        "text": "...",
+        "break_after_ms": 0
+      }
+    ],
+    "plain_script": "..."
   },
   "questions": {
     "items": [
@@ -131,6 +138,140 @@ question_plan: QuestionSpec[]
       "story_length_seconds": 0
     }
   }
+}
+```
+
+---
+
+## ElevenLabs Output Format
+
+### Dialogue vs. Monologue
+
+- **`is_dialogue: false`** – Single speaker (Narrator). Use standard TTS.
+- **`is_dialogue: true`** – Multiple speakers. Use ElevenLabs Text-to-Dialogue API.
+
+### Speakers
+
+Each speaker entry specifies:
+- **`id`**: Identifier used in segments (Narrator, SpeakerA, SpeakerB)
+- **`gender`**: `"male"` or `"female"` – used to assign voice ID in code
+- **`voice_description`**: Brief description for voice selection (e.g., "warm female narrator", "young male customer")
+- **`stability`**: 
+  - `"creative"` – More emotional/expressive
+  - `"natural"` – Balanced (default)
+  - `"robust"` – Highly stable, clearer pronunciation
+
+### Segments
+
+The story is broken into **segments**, each with:
+- **`speaker_id`**: Which speaker says this line
+- **`text`**: The spoken text (may include ElevenLabs markup)
+- **`break_after_ms`**: Pause after this segment in milliseconds
+
+### Break Duration Logic
+
+Breaks give the user time to write down what they heard. Calculate based on **sentence length**:
+
+```
+break_after_ms = word_count × 250ms (approximately)
+```
+
+**Guidelines:**
+- Short sentence (5-8 words): 1500-2000ms
+- Medium sentence (9-15 words): 2500-3500ms
+- Long sentence (16+ words): 4000-5000ms
+- After speaker change in dialogue: add extra 500ms
+
+### ElevenLabs Markup in Text
+
+You can use:
+- **Punctuation** for natural pacing:
+  - Ellipses (…) for hesitation: `"It… well, it might work."`
+  - Dashes (—) for short pauses: `"Wait — what's that noise?"`
+  - CAPS for emphasis: `"It was a VERY long day."`
+
+- **Break tags** within a segment for mid-sentence pauses:
+  ```
+  "Hold on, let me think." <break time="1.0s" /> "Alright, I've got it."
+  ```
+
+### Example Output (B1 Dialogue)
+
+```json
+{
+  "is_dialogue": true,
+  "speakers": [
+    {
+      "id": "Narrator",
+      "gender": "female",
+      "voice_description": "warm, clear female narrator",
+      "stability": "natural"
+    },
+    {
+      "id": "SpeakerA",
+      "gender": "female",
+      "voice_description": "young woman, polite customer",
+      "stability": "natural"
+    },
+    {
+      "id": "SpeakerB", 
+      "gender": "male",
+      "voice_description": "friendly male barista",
+      "stability": "natural"
+    }
+  ],
+  "segments": [
+    {
+      "speaker_id": "Narrator",
+      "text": "Maria walked into the coffee shop and joined the short queue.",
+      "break_after_ms": 3000
+    },
+    {
+      "speaker_id": "Narrator",
+      "text": "When it was her turn, she ordered a large latte with oat milk.",
+      "break_after_ms": 3500
+    },
+    {
+      "speaker_id": "SpeakerA",
+      "text": "Excuse me, I asked for oat milk, but this tastes like regular milk.",
+      "break_after_ms": 4000
+    },
+    {
+      "speaker_id": "SpeakerB",
+      "text": "I'm so sorry about that. Let me make you a new one right away.",
+      "break_after_ms": 4000
+    }
+  ],
+  "plain_script": "Maria walked into the coffee shop..."
+}
+```
+
+### Example Output (A2 Monologue)
+
+```json
+{
+  "is_dialogue": false,
+  "speakers": [
+    {
+      "id": "Narrator",
+      "gender": "female",
+      "voice_description": "clear, slow-speaking female narrator",
+      "stability": "robust"
+    }
+  ],
+  "segments": [
+    {
+      "speaker_id": "Narrator",
+      "text": "Anna woke up early on Saturday.",
+      "break_after_ms": 2000
+    },
+    {
+      "speaker_id": "Narrator", 
+      "text": "She wanted to go to the park.",
+      "break_after_ms": 2500
+    }
+  ],
+  "plain_script": "Anna woke up early on Saturday. She wanted to go to the park."
 }
 ```
 
