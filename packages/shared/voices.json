@@ -1,0 +1,340 @@
+{
+    "en-GB": [
+        {
+            "voiceId": "KLON7Nwan8mJxpF2R8Yw",
+            "gender": "male"
+        },
+        {
+            "voiceId": "9TwzC887zQyDD4yBthzD",
+            "gender": "female"
+        },
+        {
+            "voiceId": "wUwsnXivqGrDWuz1Fc89",
+            "gender": "male"
+        },
+        {
+            "voiceId": "XZEfcFyBnzsNJrdvkWdI",
+            "gender": "male"
+        },
+        {
+            "voiceId": "fTtv3eikoepIosk8dTZ5",
+            "gender": "female"
+        },
+        {
+            "voiceId": "B5QSQFV9Yu7xHDMZJbWb",
+            "gender": "female"
+        }
+    ],
+    "en-US": [
+        {
+            "voiceId": "Cz0K1kOv9tD8l0b5Qu53",
+            "gender": "male"
+        },
+        {
+            "voiceId": "O4cGUVdAocn0z4EpQ9yF",
+            "gender": "female"
+        },
+        {
+            "voiceId": "TWutjvRaJqAX89preB4e",
+            "gender": "male"
+        },
+        {
+            "voiceId": "1SM7GgM6IMuvQlz2BwM3",
+            "gender": "male"
+        },
+        {
+            "voiceId": "iNwc1Lv2YQLywnCvjfn1",
+            "gender": "female"
+        },
+        {
+            "voiceId": "m3yAHyFEFKtbCIM5n7GF",
+            "gender": "female"
+        }
+    ],
+    "es-ES": [
+        {
+            "voiceId": "ntkgXc9uETkrSWUa2Gja",
+            "gender": "male"
+        },
+        {
+            "voiceId": "gc61tTk93h3LBXPxew2V",
+            "gender": "male"
+        },
+        {
+            "voiceId": "BPoDAH7n4gFrnGY27Jkj",
+            "gender": "male"
+        },
+        {
+            "voiceId": "T4Au24Lt2uWk24Qra0No",
+            "gender": "female"
+        },
+        {
+            "voiceId": "UOIqAnmS11Reiei1Ytkc",
+            "gender": "female"
+        },
+        {
+            "voiceId": "2VUqK4PEdMj16L6xTN4J",
+            "gender": "female"
+        }
+    ],
+    "es-419": [
+        {
+            "voiceId": "p5EUznrYaWnafKvUkNiR",
+            "gender": "female"
+        },
+        {
+            "voiceId": "IqGIz3dgA7lYSRe3s8tS",
+            "gender": "female"
+        },
+        {
+            "voiceId": "3ttovAt5bt3Kk38UGIob",
+            "gender": "female"
+        },
+        {
+            "voiceId": "61Yorma5H9xnZos9rERQ",
+            "gender": "male"
+        },
+        {
+            "voiceId": "NDcVpQJv7Naa7ZKrqtEk",
+            "gender": "male"
+        },
+        {
+            "voiceId": "eqx5NtkvZtmylCCnpta7",
+            "gender": "male"
+        }
+    ],
+    "fr": [
+        {
+            "voiceId": "8qnuneLiGjGrT4A62CCe",
+            "gender": "male"
+        },
+        {
+            "voiceId": "d3AXX0BlgJHYFCuH9X88",
+            "gender": "female"
+        },
+        {
+            "voiceId": "mVjOqyqTPfwlXPjV5sjX",
+            "gender": "male"
+        },
+        {
+            "voiceId": "hqfrgApggtO1785R4Fsn",
+            "gender": "male"
+        },
+        {
+            "voiceId": "F1toM6PcP54s45kOOAyV",
+            "gender": "female"
+        },
+        {
+            "voiceId": "HuLbOdhRlvQQN8oPP0AJ",
+            "gender": "female"
+        }
+    ],
+    "de": [
+        {
+            "voiceId": "xH6rAlU6xUCcDlplBaJQ",
+            "gender": "male"
+        },
+        {
+            "voiceId": "ylDY7LzG7W9U8b3RLJAb",
+            "gender": "male"
+        },
+        {
+            "voiceId": "f64OyGck4gc2zk7QOs55",
+            "gender": "male"
+        },
+        {
+            "voiceId": "baebHbhnJ9ASPPp11oEY",
+            "gender": "female"
+        },
+        {
+            "voiceId": "wUrj2qIfmBZAz9x7k6yN",
+            "gender": "female"
+        },
+        {
+            "voiceId": "b07hJVVJyFDBHxFNr1Qb",
+            "gender": "female"
+        }
+    ],
+    "ru": [
+        {
+            "voiceId": "YjESejviApN7SHrbfnA2",
+            "gender": "female"
+        },
+        {
+            "voiceId": "Jbte7ht1CqapnZvc4KpK",
+            "gender": "female"
+        },
+        {
+            "voiceId": "uQRQyfqc46WuEktqwuiQ",
+            "gender": "male"
+        },
+        {
+            "voiceId": "rQOBu7YxCDxGiFdTm28w",
+            "gender": "male"
+        },
+        {
+            "voiceId": "dHAwRJVaEPhU907QLTPW",
+            "gender": "female"
+        },
+        {
+            "voiceId": "qJBO8ZmKp4te7NTtYgzz",
+            "gender": "male"
+        }
+    ],
+    "sv": [
+        {
+            "voiceId": "oJEeOXECH9V31Oci9WHK",
+            "gender": "male"
+        },
+        {
+            "voiceId": "DSL3PSQNPbkOavwmnYl1",
+            "gender": "male"
+        },
+        {
+            "voiceId": "HqmZnnvy6tCQd8EGWKRT",
+            "gender": "female"
+        },
+        {
+            "voiceId": "1Iztu4UHnTb9SUjJcpS1",
+            "gender": "female"
+        },
+        {
+            "voiceId": "QLfvbukvQvrPOx9HXQ3x",
+            "gender": "female"
+        },
+        {
+            "voiceId": "tomkxGQGz4b1kE0EM722",
+            "gender": "male"
+        }
+    ],
+    "nl": [
+        {
+            "voiceId": "FpLGR2n1CcG1v7SHJFsa",
+            "gender": "male"
+        },
+        {
+            "voiceId": "gdTrLNuwWUaxC0z5n1j7",
+            "gender": "male"
+        },
+        {
+            "voiceId": "AyQGttFzg1EY7EIKkpHs",
+            "gender": "female"
+        },
+        {
+            "voiceId": "cPimkqmS0qNAJJNGxavl",
+            "gender": "female"
+        },
+        {
+            "voiceId": "OlBRrVAItyi00MuGMbna",
+            "gender": "female"
+        },
+        {
+            "voiceId": "g7B5PNoscIXomLNUmHAb",
+            "gender": "female"
+        }
+    ],
+    "pt-PT": [
+        {
+            "voiceId": "RlGHmE2fztwdBDat0jYf",
+            "gender": "male"
+        },
+        {
+            "voiceId": "c0rzOw18hxEhaSybUod2",
+            "gender": "male"
+        },
+        {
+            "voiceId": "Gpw2ImaLQ8HDBoEKBB0S",
+            "gender": "male"
+        },
+        {
+            "voiceId": "NkpT2jezTenCDRKHkWiX",
+            "gender": "female"
+        },
+        {
+            "voiceId": "1Z7Y8o9cvUeWq8oLKgMY",
+            "gender": "female"
+        },
+        {
+            "voiceId": "MzqUf1HbJ8UmQ0wUsx2p",
+            "gender": "female"
+        }
+    ],
+    "pt-BR": [
+        {
+            "voiceId": "NKKvpecEshlHm99K9zn9",
+            "gender": "male"
+        },
+        {
+            "voiceId": "9Gv9jd4TDwlmfGxF4Mwp",
+            "gender": "male"
+        },
+        {
+            "voiceId": "RGymW84CSmfVugnA5tvA",
+            "gender": "female"
+        },
+        {
+            "voiceId": "mPDAoQyGzxBSkE0OAOKw",
+            "gender": "female"
+        },
+        {
+            "voiceId": "4F1F1ID7RvNrXd0lgAnZ",
+            "gender": "male"
+        },
+        {
+            "voiceId": "GDzHdQOi6jjf8zaXhCYD",
+            "gender": "female"
+        }
+    ],
+    "id": [
+        {
+            "voiceId": "zmqLb9Ysr8fUvDD7hXK8",
+            "gender": "male"
+        },
+        {
+            "voiceId": "WXmGNP5rvPWuO0RYTqfP",
+            "gender": "male"
+        },
+        {
+            "voiceId": "xChNffR8mWkGIrdSUYsg",
+            "gender": "male"
+        },
+        {
+            "voiceId": "1Z7Y8o9cvUeWq8oLKgMY",
+            "gender": "female"
+        },
+        {
+            "voiceId": "RXe6OFmxoC0nlSWpuCDy",
+            "gender": "female"
+        },
+        {
+            "voiceId": "8FsOrsZSELg9otqX9nPu",
+            "gender": "female"
+        }
+    ],
+    "it": [
+        {
+            "voiceId": "CiwzbDpaN3pQXjTgx3ML",
+            "gender": "female"
+        },
+        {
+            "voiceId": "90ipbRoKi4CpHXvKVtl0",
+            "gender": "female"
+        },
+        {
+            "voiceId": "QITiGyM4owEZrBEf0QV8",
+            "gender": "female"
+        },
+        {
+            "voiceId": "o5tUAYEqld5GJZ1Lv8uC",
+            "gender": "male"
+        },
+        {
+            "voiceId": "o4b57JYAECRMJyCEXyIE",
+            "gender": "male"
+        },
+        {
+            "voiceId": "4YsN90HrCPrOCmBglwMA",
+            "gender": "male"
+        }
+    ]
+}

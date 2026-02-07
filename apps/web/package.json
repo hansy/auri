@@ -15,6 +15,7 @@
     "@auri/emails": "workspace:*",
     "@auri/shared": "workspace:*",
     "@elevenlabs/elevenlabs-js": "^2.34.0",
+    "@google-cloud/storage": "^7.19.0",
     "@google/genai": "^1.38.0",
     "@neondatabase/serverless": "^1.0.2",
     "@radix-ui/react-select": "^2.2.6",

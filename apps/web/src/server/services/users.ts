@@ -21,6 +21,13 @@ export class UserService {
         return user;
     }
 
+    static async getUserById(userId: string) {
+        const [user] = await db.select()
+            .from(users)
+            .where(eq(users.id, userId));
+        return user;
+    }
+
     static async getActiveConfirmation(userId: string) {
         const [confirmation] = await db.select()
             .from(emailConfirmations)

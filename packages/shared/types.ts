@@ -1,19 +1,18 @@
 
 export enum Language {
-  ENGLISH_UK = 'English (UK)',
-  ENGLISH_USA = 'English (USA)',
-  SPANISH_SPAIN = 'Spanish (Spain)',
-  SPANISH_LATIN_AMERICA = 'Spanish (Latin America)',
-  FRENCH = 'French',
-  GERMAN = 'German',
-  RUSSIAN = 'Russian',
-  SWEDISH = 'Swedish',
-  DUTCH = 'Dutch',
-  FINNISH = 'Finnish',
-  PORTUGUESE_PORTUGAL = 'Portuguese (Portugal)',
-  PORTUGUESE_BRAZIL = 'Portuguese (Brazil)',
-  INDONESIAN = 'Indonesian',
-  ITALIAN = 'Italian'
+  ENGLISH_UK = 'en-GB',
+  ENGLISH_USA = 'en-US',
+  SPANISH_SPAIN = 'es-ES',
+  SPANISH_LATIN_AMERICA = 'es-419',
+  FRENCH = 'fr',
+  GERMAN = 'de',
+  RUSSIAN = 'ru',
+  SWEDISH = 'sv',
+  DUTCH = 'nl',
+  PORTUGUESE_PORTUGAL = 'pt-PT',
+  PORTUGUESE_BRAZIL = 'pt-BR',
+  INDONESIAN = 'id',
+  ITALIAN = 'it'
 }
 
 export enum CEFR {

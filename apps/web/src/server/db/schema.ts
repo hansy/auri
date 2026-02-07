@@ -6,7 +6,7 @@ export const users = pgTable('users', {
     id: uuid('id').defaultRandom().primaryKey(),
     email: text('email').notNull().unique(),
     targetLanguage: text('target_language').notNull(),
-    nativeLanguage: text('native_language').default('English (USA)').notNull(),
+    nativeLanguage: text('native_language').default('en-US').notNull(),
     proficiencyLevel: proficiencyLevelEnum('proficiency_level').notNull(),
     streak: integer('streak').default(0).notNull(),
     isConfirmed: boolean('is_confirmed').default(false).notNull(),
@@ -28,6 +28,8 @@ export const lessons = pgTable('lessons', {
     id: uuid('id').defaultRandom().primaryKey(),
     userId: uuid('user_id').references(() => users.id).notNull(),
     contentJson: jsonb('content_json').notNull(),
+    title: text('title').notNull(),
+    proficiencyLevel: proficiencyLevelEnum('proficiency_level').notNull(),
     audioUrl: text('audio_url'), // Link to stored audio if we store it, or just base64 in json? Let's keep a field.
     sentAt: timestamp('sent_at').defaultNow().notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),

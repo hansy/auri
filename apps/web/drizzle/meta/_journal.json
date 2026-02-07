@@ -22,6 +22,20 @@
       "when": 1770449412842,
       "tag": "0002_many_phalanx",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1770459469146,
+      "tag": "0003_abandoned_famine",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1770460691646,
+      "tag": "0004_huge_inhumans",
+      "breakpoints": true
     }
   ]
 }

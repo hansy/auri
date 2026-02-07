@@ -1,0 +1,1 @@
+ALTER TABLE "users" ALTER COLUMN "native_language" SET DEFAULT 'en-US';
