@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp, boolean, integer, jsonb, uuid, pgEnum } from 'drizzle-orm/pg-core';
 
-export const levelEnum = pgEnum('cefr_level', ['A2', 'B1', 'B2', 'C1']);
+export const levelEnum = pgEnum('cefr_level', ['A0', 'A1', 'A2', 'B1', 'B2', 'C1']);
 
 export const users = pgTable('users', {
     id: uuid('id').defaultRandom().primaryKey(),

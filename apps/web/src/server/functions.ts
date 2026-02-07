@@ -1,42 +1,55 @@
 import { createServerFn } from "@tanstack/react-start";
-import { db } from "./db";
-import { users, emailConfirmations } from "./db/schema";
-import { eq } from "drizzle-orm";
 import { tasks } from "@trigger.dev/sdk/v3";
 import { confirmEmailTask } from "./trigger/confirmEmail";
 import { generateLessonTask } from "./trigger/generateLesson";
+import { normalizeEmail } from "@auri/shared/validation";
+import { UserService } from "./services/users";
+import { CEFR } from "@auri/shared/types";
+import { db } from "./db";
+import { users, emailConfirmations } from "./db/schema";
+import { eq } from "drizzle-orm";
 
 export const subscribeFn = createServerFn({ method: "POST" })
     .inputValidator((data: { email: string; language: string; level: string }) => data)
     .handler(async (ctx) => {
         const { email, language, level } = ctx.data;
+        const normalizedEmail = normalizeEmail(email);
+
+        if (!normalizedEmail) {
+            return { success: false, error: 'Email is required' };
+        }
 
         try {
-            // 1. Create or update user
-            const [user] = await db.insert(users).values({
-                email,
-                targetLanguage: language,
-                level: level as any,
-                isConfirmed: false,
-            }).onConflictDoUpdate({
-                target: users.email,
-                set: { targetLanguage: language, level: level as any, isConfirmed: false } // Reset confirmation if they re-subscribe
-            }).returning();
+            const existingUser = await UserService.getByEmail(normalizedEmail);
 
-            // 2. Generate confirmation token
-            const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-            const expiresAt = new Date();
-            expiresAt.setHours(expiresAt.getHours() + 24);
+            let userId: string;
+            let token: string;
 
-            await db.insert(emailConfirmations).values({
-                userId: user.id,
-                token,
-                expiresAt,
-            });
+            if (existingUser) {
+                if (existingUser.isConfirmed) {
+                    return { success: false, error: 'User is already signed up' };
+                }
+
+                userId = existingUser.id;
+                await UserService.updatePreferences(userId, language, level as CEFR);
+
+                const activeConfirmation = await UserService.getActiveConfirmation(userId);
+                if (activeConfirmation) {
+                    token = activeConfirmation.token;
+                } else {
+                    const newConfirmation = await UserService.createConfirmation(userId);
+                    token = newConfirmation.token;
+                }
+            } else {
+                const newUser = await UserService.createUser(normalizedEmail, language, level as CEFR);
+                userId = newUser.id;
+                const newConfirmation = await UserService.createConfirmation(userId);
+                token = newConfirmation.token;
+            }
 
             // 3. Trigger confirmation email task
             await tasks.trigger<typeof confirmEmailTask>("send-confirmation-email", {
-                email,
+                email: normalizedEmail,
                 token,
             });
 
@@ -115,5 +128,47 @@ export const confirmFn = createServerFn({ method: "POST" })
         } catch (e) {
             console.error('Confirmation error:', e);
             return { success: false, error: 'Failed to confirm email. Please try again later.' };
+        }
+    });
+
+export const resendConfirmationFn = createServerFn({ method: "POST" })
+    .inputValidator((data: { email: string }) => data)
+    .handler(async (ctx) => {
+        const { email } = ctx.data;
+        const normalizedEmail = normalizeEmail(email);
+
+        if (!normalizedEmail) {
+            return { success: false, error: 'Email is required' };
+        }
+
+        try {
+            const user = await UserService.getByEmail(normalizedEmail);
+
+            if (!user) {
+                return { success: false, error: 'Email not found. Please sign up first.' };
+            }
+
+            if (user.isConfirmed) {
+                return { success: false, error: 'User is already signed up and confirmed.' };
+            }
+
+            let token: string;
+            const activeConfirmation = await UserService.getActiveConfirmation(user.id);
+            if (activeConfirmation) {
+                token = activeConfirmation.token;
+            } else {
+                const newConfirmation = await UserService.createConfirmation(user.id);
+                token = newConfirmation.token;
+            }
+
+            await tasks.trigger<typeof confirmEmailTask>("send-confirmation-email", {
+                email: normalizedEmail,
+                token,
+            });
+
+            return { success: true, message: 'New confirmation link sent! Check your inbox.' };
+        } catch (e) {
+            console.error('Resend error:', e);
+            return { success: false, error: 'Failed to resend confirmation. Please try again later.' };
         }
     });

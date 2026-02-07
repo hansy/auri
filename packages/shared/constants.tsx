@@ -5,11 +5,22 @@ import { LANGUAGES_DATA } from './language-utils';
 export const LANGUAGES = LANGUAGES_DATA.map(l => l.name as Language);
 
 export const CEFR_LEVELS = [
+  CEFR.A0,
+  CEFR.A1,
   CEFR.A2,
   CEFR.B1,
   CEFR.B2,
   CEFR.C1
 ];
+
+export const CEFR_DESCRIPTIONS: Record<CEFR, string> = {
+  [CEFR.A0]: 'Complete beginner, brand new to language.',
+  [CEFR.A1]: 'Understands very basic words and phrases when speech is slow and clear.',
+  [CEFR.A2]: 'Understands simple, familiar speech and catches the main idea.',
+  [CEFR.B1]: 'Understands clear everyday speech and follows the main points.',
+  [CEFR.B2]: 'Understands natural speech, including details and opinions.',
+  [CEFR.C1]: 'Understands complex speech, including implied meaning and tone.',
+};
 
 export const LANGUAGE_VARIANTS: Record<Language, string[]> = LANGUAGES_DATA.reduce((acc, l) => {
   acc[l.name as Language] = l.variants.map(v => v.name);

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { getConfirmationDetailsFn, confirmFn } from '../../server/functions';
+import { getConfirmationDetailsFn, confirmFn, resendConfirmationFn } from '../../server/functions';
 import { LANGUAGE_VARIANTS } from '@auri/shared/constants';
 import { Language } from '@auri/shared/types';
-import { Loader2, CheckCircle2, AlertCircle, Globe, GraduationCap, ArrowRight } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertCircle, Globe, GraduationCap, ArrowRight, Mail, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
+import { isValidEmail } from '@auri/shared/validation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
@@ -16,10 +17,13 @@ function UserConfirmationPage() {
     const { token } = Route.useParams() as any;
     const navigate = useNavigate();
     const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'ready'>('loading');
-    const [error, setError] = useState<string | null>(null);
     const [details, setDetails] = useState<{ language: string; level: string } | null>(null);
     const [selectedVariant, setSelectedVariant] = useState<string>('');
     const [isConfirming, setIsConfirming] = useState(false);
+
+    const [resendEmail, setResendEmail] = useState('');
+    const [isResending, setIsResending] = useState(false);
+    const [resendSuccess, setResendSuccess] = useState(false);
 
     useEffect(() => {
         const fetchDetails = async () => {
@@ -35,11 +39,9 @@ function UserConfirmationPage() {
                 } else {
                     const errMsg = 'error' in result ? (result.error as string) : 'Failed to load confirmation details';
                     toast.error(errMsg);
-                    setError(errMsg);
                     setStatus('error');
                 }
             } catch (err) {
-                setError('An unexpected error occurred');
                 setStatus('error');
             }
         };
@@ -62,14 +64,35 @@ function UserConfirmationPage() {
             } else {
                 const errMsg = 'error' in result ? (result.error as string) : 'Failed to confirm email';
                 toast.error(errMsg);
-                setError(errMsg);
                 setStatus('error');
             }
         } catch (err) {
-            setError('An unexpected error occurred during confirmation');
             setStatus('error');
         } finally {
             setIsConfirming(false);
+        }
+    };
+
+    const handleResend = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!isValidEmail(resendEmail)) {
+            toast.error('Please enter a valid email');
+            return;
+        }
+
+        setIsResending(true);
+        try {
+            const result = await (resendConfirmationFn as any)({ data: { email: resendEmail } });
+            if (result.success) {
+                setResendSuccess(true);
+                toast.success('Confirmation link resent!');
+            } else {
+                toast.error(result.error || 'Failed to resend link');
+            }
+        } catch (err) {
+            toast.error('An unexpected error occurred');
+        } finally {
+            setIsResending(false);
         }
     };
 
@@ -89,22 +112,61 @@ function UserConfirmationPage() {
             <div className="flex-grow flex items-center justify-center py-12">
                 <div className="w-full max-w-xl bg-white border border-stone-200 rounded-[2.5rem] p-10 md:p-14 shadow-xl text-center">
                     {status === 'error' && (
-                        <div className="space-y-6">
-                            <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto">
-                                <AlertCircle className="w-10 h-10 text-red-500" />
+                        <div className="space-y-8">
+                            <div className="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center mx-auto">
+                                <AlertCircle className="w-10 h-10 text-amber-500" />
                             </div>
-                            <div className="space-y-2">
-                                <h1 className="text-3xl font-light serif text-stone-800">Something went wrong</h1>
-                                <p className="text-stone-500 leading-relaxed font-medium">
-                                    {error || "The link might be expired or invalid. Please try subscribing again from the homepage."}
+                            <div className="space-y-3">
+                                <h1 className="text-3xl font-light serif text-stone-800">Link Expired or Invalid</h1>
+                                <p className="text-stone-500 leading-relaxed font-medium max-w-sm mx-auto">
+                                    This confirmation link is no longer valid. Don't worry, you can request a new one below.
                                 </p>
                             </div>
-                            <button
-                                onClick={() => navigate({ to: '/' })}
-                                className="px-8 py-4 bg-stone-900 text-white rounded-2xl font-semibold hover:bg-stone-800 transition-all shadow-md mt-4"
-                            >
-                                Back to Homepage
-                            </button>
+
+                            {!resendSuccess ? (
+                                <form onSubmit={handleResend} className="space-y-4 max-w-sm mx-auto pt-4">
+                                    <div className="relative">
+                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-300" />
+                                        <input
+                                            type="email"
+                                            placeholder="Enter your email"
+                                            value={resendEmail}
+                                            onChange={(e) => setResendEmail(e.target.value)}
+                                            className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-stone-900/5 focus:border-stone-900 transition-all text-stone-800 placeholder:text-stone-300"
+                                            required
+                                        />
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        disabled={isResending}
+                                        className="w-full px-8 py-4 bg-stone-900 text-white rounded-2xl font-semibold hover:bg-stone-800 transition-all flex items-center justify-center gap-3 shadow-md disabled:opacity-50"
+                                    >
+                                        {isResending ? (
+                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                        ) : (
+                                            <RefreshCw className="w-5 h-5" />
+                                        )}
+                                        <span>Resend Confirmation Link</span>
+                                    </button>
+                                </form>
+                            ) : (
+                                <div className="p-6 bg-stone-50 border border-stone-200 rounded-2xl animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-sm mx-auto">
+                                    <div className="w-10 h-10 bg-stone-900 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <CheckCircle2 className="w-5 h-5 text-white" />
+                                    </div>
+                                    <h4 className="text-lg font-light serif text-stone-800 mb-1">Link Sent</h4>
+                                    <p className="text-stone-400 text-xs font-medium">Please check your inbox at <span className="text-stone-600 font-bold">{resendEmail}</span></p>
+                                </div>
+                            )}
+
+                            <div className="pt-4 border-t border-stone-100 mt-8">
+                                <button
+                                    onClick={() => navigate({ to: '/' })}
+                                    className="text-stone-400 hover:text-stone-600 transition-colors text-sm font-medium flex items-center justify-center gap-2 mx-auto"
+                                >
+                                    <span>Return to Homepage</span>
+                                </button>
+                            </div>
                         </div>
                     )}
 

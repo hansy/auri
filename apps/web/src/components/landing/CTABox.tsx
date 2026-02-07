@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Language, CEFR, UserProfile } from '@auri/shared/types';
-import { CEFR_LEVELS } from '@auri/shared/constants';
-import { Mail, ArrowRight, Sparkles, Info } from 'lucide-react';
+import { Mail, ArrowRight, Sparkles } from 'lucide-react';
 import { subscribeFn } from '../../server/functions';
 import { toast } from 'sonner';
+import { isValidEmail } from '@auri/shared/validation';
 
 import { LanguageSelector } from '../LanguageSelector';
+import { LevelSelector } from '../LevelSelector';
 
 interface CTABoxProps {
     onStart: (lang?: Language, level?: CEFR) => void;
@@ -17,13 +18,12 @@ const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
     const [selectedVariant, setSelectedVariant] = useState<string>('');
     const [selectedLevel, setSelectedLevel] = useState<CEFR>(CEFR.B1);
     const [email, setEmail] = useState('');
-    const [showTooltip, setShowTooltip] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
     const handleSubscribe = async () => {
-        if (!email) {
-            toast.error('Please enter your email');
+        if (!isValidEmail(email)) {
+            toast.error('Please enter a valid email');
             return;
         }
         setIsSubmitting(true);
@@ -64,42 +64,11 @@ const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
                     </div>
 
                     {/* Proficiency Selection */}
-                    <div className="w-full space-y-4 mb-10">
-                        <div className="flex items-center justify-center gap-2">
-                            <label className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">Proficiency Level</label>
-                            <div className="relative flex items-center">
-                                <button
-                                    type="button"
-                                    onMouseEnter={() => setShowTooltip(true)}
-                                    onMouseLeave={() => setShowTooltip(false)}
-                                    className="text-stone-300 hover:text-stone-500 transition-colors cursor-help"
-                                    aria-label="Level information"
-                                >
-                                    <Info className="w-3.5 h-3.5" />
-                                </button>
-                                {showTooltip && (
-                                    <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-64 p-4 bg-stone-900 text-white text-[11px] font-medium leading-relaxed rounded-2xl shadow-2xl z-[100] animate-in fade-in slide-in-from-bottom-2">
-                                        <p>Designed for learners with basic knowledge (A2+). Not optimized for absolute beginners starting from zero.</p>
-                                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-stone-900" />
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="flex flex-wrap justify-center gap-2">
-                            {CEFR_LEVELS.map(lvl => (
-                                <button
-                                    key={lvl}
-                                    type="button"
-                                    onClick={() => setSelectedLevel(lvl)}
-                                    className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${selectedLevel === lvl
-                                        ? 'bg-stone-900 text-white'
-                                        : 'bg-stone-50 text-stone-600 border border-stone-100 hover:border-stone-300'
-                                        }`}
-                                >
-                                    {lvl}
-                                </button>
-                            ))}
-                        </div>
+                    <div className="w-full mb-10">
+                        <LevelSelector
+                            selectedLevel={selectedLevel}
+                            onLevelChange={setSelectedLevel}
+                        />
                     </div>
 
                     {/* Email Input + Button Group */}
