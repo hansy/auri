@@ -3,8 +3,7 @@ import { Language, CEFR, UserProfile } from '@auri/shared/types';
 import { Mail, ArrowRight, Sparkles } from 'lucide-react';
 import { subscribeFn } from '../../server/functions';
 import { toast } from 'sonner';
-import { isValidEmail } from '@auri/shared/validation';
-
+import { SubscriptionSchema } from '@auri/shared/validation';
 import { LanguageSelector } from '../LanguageSelector';
 import { LevelSelector } from '../LevelSelector';
 
@@ -21,18 +20,22 @@ const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
     const [isSuccess, setIsSuccess] = useState(false);
 
     const handleSubscribe = async () => {
-        if (!isValidEmail(email)) {
-            toast.error('Please enter a valid email');
+        const validation = SubscriptionSchema.safeParse({
+            email,
+            language: selectedLanguage,
+            proficiencyLevel: selectedLevel,
+        });
+
+        if (!validation.success) {
+            const firstError = validation.error.errors[0]?.message || 'Invalid input';
+            toast.error(firstError);
             return;
         }
+
         setIsSubmitting(true);
         try {
             const result = await (subscribeFn as any)({
-                data: {
-                    email,
-                    language: selectedLanguage,
-                    proficiencyLevel: selectedLevel,
-                }
+                data: validation.data
             });
             if (result.success) {
                 setIsSuccess(true);

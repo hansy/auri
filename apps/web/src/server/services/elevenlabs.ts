@@ -1,13 +1,13 @@
 import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
 
-const ELEVEN_LABS_API_KEY = process.env.ELEVEN_LABS_API_KEY;
+const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 
-if (!ELEVEN_LABS_API_KEY) {
-    console.error("ELEVEN_LABS_API_KEY is not set in environment variables");
+if (!ELEVENLABS_API_KEY) {
+    console.error("ELEVENLABS_API_KEY is not set in environment variables");
 }
 
 const client = new ElevenLabsClient({
-    apiKey: ELEVEN_LABS_API_KEY,
+    apiKey: ELEVENLABS_API_KEY,
 });
 
 interface TextToSpeechOptions {
@@ -21,8 +21,8 @@ interface TextToSpeechOptions {
 }
 
 export const textToSpeech = async (text: string, options: TextToSpeechOptions = {}): Promise<Buffer> => {
-    if (!ELEVEN_LABS_API_KEY) {
-        throw new Error('ELEVEN_LABS_API_KEY is not set');
+    if (!ELEVENLABS_API_KEY) {
+        throw new Error('ELEVENLABS_API_KEY is not set');
     }
 
     const {
@@ -69,8 +69,8 @@ export const textToSpeech = async (text: string, options: TextToSpeechOptions = 
 };
 
 export const speechToText = async (audioBuffer: Buffer): Promise<string> => {
-    if (!ELEVEN_LABS_API_KEY) {
-        throw new Error('ELEVEN_LABS_API_KEY is not set');
+    if (!ELEVENLABS_API_KEY) {
+        throw new Error('ELEVENLABS_API_KEY is not set');
     }
 
     const blob = new Blob([new Uint8Array(audioBuffer)], { type: "audio/wav" });
@@ -98,8 +98,8 @@ export interface DialogueSegment {
 }
 
 export const generateDialogue = async (segments: DialogueSegment[], languageCode?: string): Promise<Buffer> => {
-    if (!ELEVEN_LABS_API_KEY) {
-        throw new Error('ELEVEN_LABS_API_KEY is not set');
+    if (!ELEVENLABS_API_KEY) {
+        throw new Error('ELEVENLABS_API_KEY is not set');
     }
 
     const inputs = segments.map(seg => {
