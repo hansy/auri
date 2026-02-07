@@ -1,95 +1,72 @@
 [
     {
-        "id": "english",
-        "name": "English",
-        "flag": "🇺🇸",
-        "variants": [
-            {
-                "name": "United Kingdom",
-                "flag": "🇬🇧"
-            },
-            {
-                "name": "USA",
-                "flag": "🇺🇸"
-            }
-        ]
+        "id": "english_uk",
+        "name": "English (UK)",
+        "flag": "🇬🇧"
     },
     {
-        "id": "spanish",
-        "name": "Spanish",
-        "flag": "🇪🇸",
-        "variants": [
-            {
-                "name": "Latin America",
-                "flag": "🌎"
-            },
-            {
-                "name": "Spain",
-                "flag": "🇪🇸"
-            }
-        ]
+        "id": "english_usa",
+        "name": "English (USA)",
+        "flag": "🇺🇸"
+    },
+    {
+        "id": "spanish_spain",
+        "name": "Spanish (Spain)",
+        "flag": "🇪🇸"
+    },
+    {
+        "id": "spanish_latin_america",
+        "name": "Spanish (Latin America)",
+        "flag": "🌎"
     },
     {
         "id": "french",
         "name": "French",
-        "flag": "🇫🇷",
-        "variants": []
+        "flag": "🇫🇷"
     },
     {
         "id": "german",
         "name": "German",
-        "flag": "🇩🇪",
-        "variants": []
+        "flag": "🇩🇪"
     },
     {
         "id": "russian",
         "name": "Russian",
-        "flag": "🇷🇺",
-        "variants": []
+        "flag": "🇷🇺"
     },
     {
         "id": "swedish",
         "name": "Swedish",
-        "flag": "🇸🇪",
-        "variants": []
+        "flag": "🇸🇪"
     },
     {
         "id": "dutch",
         "name": "Dutch",
-        "flag": "🇳🇱",
-        "variants": []
+        "flag": "🇳🇱"
     },
     {
         "id": "finnish",
         "name": "Finnish",
-        "flag": "🇫🇮",
-        "variants": []
+        "flag": "🇫🇮"
     },
     {
-        "id": "portuguese",
-        "name": "Portuguese",
-        "flag": "🇵🇹",
-        "variants": [
-            {
-                "name": "Portugal",
-                "flag": "🇵🇹"
-            },
-            {
-                "name": "Brazil",
-                "flag": "🇧🇷"
-            }
-        ]
+        "id": "portuguese_portugal",
+        "name": "Portuguese (Portugal)",
+        "flag": "🇵🇹"
+    },
+    {
+        "id": "portuguese_brazil",
+        "name": "Portuguese (Brazil)",
+        "flag": "🇧🇷"
     },
     {
         "id": "indonesian",
         "name": "Indonesian",
-        "flag": "🇮🇩",
-        "variants": []
+        "flag": "🇮🇩"
     },
     {
         "id": "italian",
         "name": "Italian",
-        "flag": "🇮🇹",
-        "variants": []
+        "flag": "🇮🇹"
     }
 ]

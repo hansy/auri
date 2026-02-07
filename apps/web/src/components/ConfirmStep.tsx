@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { CheckCircle2, Loader2, ArrowRight, Sparkles } from 'lucide-react';
 import { confirmFn, getConfirmationDetailsFn } from '../server/functions';
 import { LanguageSelector } from './LanguageSelector';
-import { Language } from '@auri/shared/types';
+import { LevelSelector } from './LevelSelector';
+import { Language, CEFR } from '@auri/shared/types';
 
 interface ConfirmStepProps {
     token: string;
@@ -12,8 +13,8 @@ interface ConfirmStepProps {
 const ConfirmStep: React.FC<ConfirmStepProps> = ({ token, onComplete }) => {
     const [status, setStatus] = useState<'loading' | 'preparing' | 'success' | 'error'>('loading');
     const [message, setMessage] = useState('Verifying your email...');
-    const [selectedLanguage, setSelectedLanguage] = useState<Language>(Language.ENGLISH);
-    const [selectedVariant, setSelectedVariant] = useState<string>('');
+    const [selectedLanguage, setSelectedLanguage] = useState<Language>(Language.ENGLISH_USA);
+    const [selectedLevel, setSelectedLevel] = useState<CEFR>(CEFR.B1);
 
     useEffect(() => {
         const fetchDetails = async () => {
@@ -21,8 +22,10 @@ const ConfirmStep: React.FC<ConfirmStepProps> = ({ token, onComplete }) => {
                 const result = await getConfirmationDetailsFn({
                     data: { token }
                 });
-                if (result.success) {
+                if (result.success && 'language' in result) {
                     setSelectedLanguage(result.language as Language);
+                    // @ts-ignore
+                    setSelectedLevel(result.proficiencyLevel as CEFR);
                     setStatus('preparing');
                     setMessage('Confirm your language settings');
                 } else {
@@ -42,11 +45,11 @@ const ConfirmStep: React.FC<ConfirmStepProps> = ({ token, onComplete }) => {
         setStatus('loading');
         setMessage('Finalizing your subscription...');
         try {
-            const result = await confirmFn({
+            const result = await (confirmFn as any)({
                 data: {
                     token,
                     targetLanguage: selectedLanguage,
-                    languageVariant: selectedVariant
+                    proficiencyLevel: selectedLevel
                 }
             });
             if (result.success) {
@@ -80,13 +83,18 @@ const ConfirmStep: React.FC<ConfirmStepProps> = ({ token, onComplete }) => {
                     <h2 className="text-2xl font-light text-stone-900 serif mb-2">Welcome Aboard!</h2>
                     <p className="text-stone-500 text-sm mb-8">Confirm or adjust your settings before we start.</p>
 
-                    <LanguageSelector
-                        selectedLanguage={selectedLanguage}
-                        onLanguageChange={setSelectedLanguage}
-                        selectedVariant={selectedVariant}
-                        onVariantChange={setSelectedVariant}
-                        className="mb-10 text-left"
-                    />
+                    <div className="w-full space-y-8 mb-10">
+                        <LanguageSelector
+                            selectedLanguage={selectedLanguage}
+                            onLanguageChange={setSelectedLanguage}
+                            className="text-left"
+                        />
+
+                        <LevelSelector
+                            selectedLevel={selectedLevel}
+                            onLevelChange={setSelectedLevel}
+                        />
+                    </div>
 
                     <button
                         onClick={handleConfirm}

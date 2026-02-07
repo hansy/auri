@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { UserProfile, Language, CEFR, LessonStep, LessonContent, ReflectionFeedback } from '@auri/shared/types';
 import { generateDailyLesson } from '../services/gemini';
-import { DOMAINS } from '@auri/shared/constants';
 import Landing from '../components/Landing';
 import DictationStep from '../components/DictationStep';
 import OralStep from '../components/OralStep';
@@ -40,21 +39,29 @@ function App() {
   const handleStartLesson = async (selectedLanguage?: Language, selectedLevel?: CEFR) => {
     setIsLoading(true);
     try {
-      const language = selectedLanguage || user?.targetLanguage || Language.ENGLISH;
-      const level = selectedLevel || user?.level || CEFR.B1;
-      const domainIndex = user?.domainIndex || 0;
-      const domain = DOMAINS[domainIndex % DOMAINS.length];
+      const language = selectedLanguage || user?.targetLanguage || Language.ENGLISH_USA;
+      const proficiencyLevel = selectedLevel || user?.proficiencyLevel || CEFR.B1; // Renamed 'level' to 'proficiencyLevel'
+      // Removed domainIndex and domain logic as per instruction
 
-      const newLesson = await generateDailyLesson(language, level, domain);
+      const newLesson = await generateDailyLesson(language, proficiencyLevel); // Removed domain parameter
       setLesson(newLesson);
 
       if (!user) {
         saveUser({
           targetLanguage: language,
-          level: level,
+          nativeLanguage: Language.ENGLISH_USA, // Default native language
+          proficiencyLevel: proficiencyLevel, // Renamed 'level' to 'proficiencyLevel'
           streak: 0,
-          domainIndex: 1 // Next domain
         });
+      } else {
+        // If user exists, update their proficiencyLevel if it was selected
+        if (selectedLanguage && selectedLevel) {
+          saveUser({
+            ...user,
+            targetLanguage: selectedLanguage,
+            proficiencyLevel: selectedLevel,
+          });
+        }
       }
 
       setCurrentStep(LessonStep.DICTATION);
@@ -89,7 +96,6 @@ function App() {
       if (user.lastCompletedDate !== today) {
         updatedUser.streak += 1;
         updatedUser.lastCompletedDate = today;
-        updatedUser.domainIndex += 1; // Increment domain for tomorrow
       }
       saveUser(updatedUser);
     }
@@ -101,7 +107,7 @@ function App() {
       <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center bg-stone-50">
         <Loader2 className="w-12 h-12 mb-4 animate-spin text-stone-400" />
         <h2 className="text-2xl font-light serif text-stone-600">Curating your lesson...</h2>
-        <p className="mt-2 text-stone-400">Strictly following CEFR {user?.level || 'B1'} standards.</p>
+        <p className="mt-2 text-stone-400">Strictly following CEFR {user?.proficiencyLevel || 'B1'} standards.</p>
       </div>
     );
   }

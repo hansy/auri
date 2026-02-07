@@ -1,5 +1,5 @@
 import { GoogleGenAI, Modality } from "@google/genai";
-import { Language, CEFR, LessonContent, Domain, LessonJSON } from '@auri/shared/types';
+import { Language, LessonContent, LessonJSON } from '@auri/shared/types';
 import { FRAMEWORK_SYSTEM_PROMPT, LESSON_DEVELOPER_PROMPT } from "@auri/shared/constants";
 
 // Always use the direct process.env.API_KEY for initialization as per guidelines
@@ -7,7 +7,7 @@ import { FRAMEWORK_SYSTEM_PROMPT, LESSON_DEVELOPER_PROMPT } from "@auri/shared/c
 // but I'll stick to process.env.API_KEY if that's what was used before.
 const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY || (import.meta as any).env.VITE_GEMINI_API_KEY });
 
-export const generateDailyLesson = async (language: Language, level: CEFR, domain: Domain): Promise<LessonContent> => {
+export async function generateDailyLesson(language: string, proficiencyLevel: string): Promise<LessonContent> {
     const ai = getAI();
 
     // 1. Generate Structured Lesson Content
@@ -15,8 +15,7 @@ export const generateDailyLesson = async (language: Language, level: CEFR, domai
         model: 'gemini-2.0-flash', // Using a stable model
         contents: LESSON_DEVELOPER_PROMPT
             .replace('{language}', language)
-            .replace('{level}', level)
-            .replace('{domain}', domain),
+            .replace('{level}', proficiencyLevel),
         config: {
             systemInstruction: FRAMEWORK_SYSTEM_PROMPT,
             responseMimeType: "application/json"
@@ -51,9 +50,10 @@ export const generateDailyLesson = async (language: Language, level: CEFR, domai
         id: Math.random().toString(36).substr(2, 9),
         json: lessonJson,
         audioBase64,
-        language
+        language: language as Language
     };
-};
+}
+;
 
 export function encodePCM(bytes: Uint8Array) {
     let binary = '';

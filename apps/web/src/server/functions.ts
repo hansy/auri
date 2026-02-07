@@ -10,9 +10,9 @@ import { users, emailConfirmations } from "./db/schema";
 import { eq } from "drizzle-orm";
 
 export const subscribeFn = createServerFn({ method: "POST" })
-    .inputValidator((data: { email: string; language: string; level: string }) => data)
+    .inputValidator((data: { email: string; language: string; proficiencyLevel: string; nativeLanguage?: string }) => data)
     .handler(async (ctx) => {
-        const { email, language, level } = ctx.data;
+        const { email, language, proficiencyLevel, nativeLanguage = 'English (USA)' } = ctx.data;
         const normalizedEmail = normalizeEmail(email);
 
         if (!normalizedEmail) {
@@ -31,7 +31,7 @@ export const subscribeFn = createServerFn({ method: "POST" })
                 }
 
                 userId = existingUser.id;
-                await UserService.updatePreferences(userId, language, level as CEFR);
+                await UserService.updatePreferences(userId, language, proficiencyLevel as CEFR);
 
                 const activeConfirmation = await UserService.getActiveConfirmation(userId);
                 if (activeConfirmation) {
@@ -41,7 +41,7 @@ export const subscribeFn = createServerFn({ method: "POST" })
                     token = newConfirmation.token;
                 }
             } else {
-                const newUser = await UserService.createUser(normalizedEmail, language, level as CEFR);
+                const newUser = await UserService.createUser(normalizedEmail, language, proficiencyLevel as CEFR, nativeLanguage);
                 userId = newUser.id;
                 const newConfirmation = await UserService.createConfirmation(userId);
                 token = newConfirmation.token;
@@ -85,7 +85,7 @@ export const getConfirmationDetailsFn = createServerFn({ method: "GET" })
             return {
                 success: true,
                 language: user.targetLanguage,
-                level: user.level,
+                proficiencyLevel: user.proficiencyLevel,
             };
         } catch (e) {
             console.error('Confirmation details error:', e);
@@ -94,9 +94,9 @@ export const getConfirmationDetailsFn = createServerFn({ method: "GET" })
     });
 
 export const confirmFn = createServerFn({ method: "POST" })
-    .inputValidator((data: { token: string; targetLanguage?: string; languageVariant?: string }) => data)
+    .inputValidator((data: { token: string; targetLanguage?: string; proficiencyLevel?: string }) => data)
     .handler(async (ctx) => {
-        const { token, targetLanguage, languageVariant } = ctx.data;
+        const { token, targetLanguage, proficiencyLevel } = ctx.data;
 
         try {
             const [confirmation] = await db.select()
@@ -107,12 +107,12 @@ export const confirmFn = createServerFn({ method: "POST" })
                 return { success: false, error: 'Invalid or expired token' };
             }
 
-            // Confirm user and save variant
+            // Confirm user and update preferences
             await db.update(users)
                 .set({
                     isConfirmed: true,
                     targetLanguage: targetLanguage,
-                    languageVariant: languageVariant
+                    proficiencyLevel: proficiencyLevel as CEFR
                 })
                 .where(eq(users.id, confirmation.userId));
 

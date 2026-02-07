@@ -1,15 +1,14 @@
 import { pgTable, text, timestamp, boolean, integer, jsonb, uuid, pgEnum } from 'drizzle-orm/pg-core';
 
-export const levelEnum = pgEnum('cefr_level', ['A0', 'A1', 'A2', 'B1', 'B2', 'C1']);
+export const proficiencyLevelEnum = pgEnum('proficiency_level', ['A0', 'A1', 'A2', 'B1', 'B2', 'C1']);
 
 export const users = pgTable('users', {
     id: uuid('id').defaultRandom().primaryKey(),
     email: text('email').notNull().unique(),
     targetLanguage: text('target_language').notNull(),
-    level: levelEnum('level').notNull(),
-    languageVariant: text('language_variant'),
+    nativeLanguage: text('native_language').default('English (USA)').notNull(),
+    proficiencyLevel: proficiencyLevelEnum('proficiency_level').notNull(),
     streak: integer('streak').default(0).notNull(),
-    domainIndex: integer('domain_index').default(0).notNull(),
     isConfirmed: boolean('is_confirmed').default(false).notNull(),
     lastCompletedDate: text('last_completed_date'),
     createdAt: timestamp('created_at').defaultNow().notNull(),

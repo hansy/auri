@@ -14,8 +14,7 @@ interface CTABoxProps {
 }
 
 const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
-    const [selectedLanguage, setSelectedLanguage] = useState<Language>(Language.ENGLISH);
-    const [selectedVariant, setSelectedVariant] = useState<string>('');
+    const [selectedLanguage, setSelectedLanguage] = useState<Language>(Language.ENGLISH_USA);
     const [selectedLevel, setSelectedLevel] = useState<CEFR>(CEFR.B1);
     const [email, setEmail] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,7 +31,7 @@ const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
                 data: {
                     email,
                     language: selectedLanguage,
-                    level: selectedLevel,
+                    proficiencyLevel: selectedLevel,
                 }
             });
             if (result.success) {
@@ -57,9 +56,6 @@ const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
                         <LanguageSelector
                             selectedLanguage={selectedLanguage}
                             onLanguageChange={setSelectedLanguage}
-                            selectedVariant={selectedVariant}
-                            onVariantChange={setSelectedVariant}
-                            hideVariant={true}
                         />
                     </div>
 
@@ -110,7 +106,7 @@ const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
                         </div>
                         <div className="text-left">
                             <p className="text-xs uppercase tracking-widest opacity-60 font-bold">Welcome back</p>
-                            <p className="font-semibold">{user.targetLanguage} • {user.level} Session</p>
+                            <p className="font-semibold">{user.targetLanguage} • {user.proficiencyLevel} Session</p>
                         </div>
                     </div>
 

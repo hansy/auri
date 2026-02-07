@@ -15,6 +15,13 @@
       "when": 1770192189732,
       "tag": "0001_workable_titania",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770449412842,
+      "tag": "0002_many_phalanx",
+      "breakpoints": true
     }
   ]
 }

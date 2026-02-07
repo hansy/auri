@@ -3,7 +3,17 @@ import { users, emailConfirmations } from "../db/schema";
 import { eq, and, gt } from "drizzle-orm";
 import { CEFR } from "@auri/shared/types";
 
+function normalizeEmail(email: string): string {
+    return email.trim().toLowerCase();
+}
+
 export class UserService {
+    static async signPlayerUp(email: string, language: string, proficiencyLevel: CEFR, nativeLanguage: string = 'English (USA)') {
+        const normalizedEmail = normalizeEmail(email);
+        if (!normalizedEmail) return null;
+        return await UserService.createUser(normalizedEmail, language, proficiencyLevel, nativeLanguage);
+    }
+
     static async getByEmail(email: string) {
         const [user] = await db.select()
             .from(users)
@@ -38,17 +48,18 @@ export class UserService {
         return confirmation;
     }
 
-    static async updatePreferences(userId: string, language: string, level: CEFR) {
+    static async updatePreferences(userId: string, language: string, proficiencyLevel: CEFR) {
         await db.update(users)
-            .set({ targetLanguage: language, level: level as any })
+            .set({ targetLanguage: language, proficiencyLevel: proficiencyLevel as any })
             .where(eq(users.id, userId));
     }
 
-    static async createUser(email: string, language: string, level: CEFR) {
+    static async createUser(email: string, language: string, proficiencyLevel: CEFR, nativeLanguage: string = 'English (USA)') {
         const [user] = await db.insert(users).values({
             email,
             targetLanguage: language,
-            level: level as any,
+            nativeLanguage,
+            proficiencyLevel: proficiencyLevel as any,
             isConfirmed: false,
         }).returning();
         return user;

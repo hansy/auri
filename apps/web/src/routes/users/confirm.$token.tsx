@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { getConfirmationDetailsFn, confirmFn, resendConfirmationFn } from '../../server/functions';
-import { LANGUAGE_VARIANTS } from '@auri/shared/constants';
-import { Language } from '@auri/shared/types';
-import { Loader2, CheckCircle2, AlertCircle, Globe, GraduationCap, ArrowRight, Mail, RefreshCw } from 'lucide-react';
+import { Language, CEFR } from '@auri/shared/types';
+import { Loader2, CheckCircle2, AlertCircle, ArrowRight, Mail, RefreshCw, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { isValidEmail } from '@auri/shared/validation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import { LanguageSelector } from '../../components/LanguageSelector';
+import { LevelSelector } from '../../components/LevelSelector';
 
 export const Route = createFileRoute('/users/confirm/$token')({
     component: UserConfirmationPage,
@@ -17,8 +18,8 @@ function UserConfirmationPage() {
     const { token } = Route.useParams() as any;
     const navigate = useNavigate();
     const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'ready'>('loading');
-    const [details, setDetails] = useState<{ language: string; level: string } | null>(null);
-    const [selectedVariant, setSelectedVariant] = useState<string>('');
+    const [selectedLanguage, setSelectedLanguage] = useState<Language>(Language.ENGLISH_USA);
+    const [selectedLevel, setSelectedLevel] = useState<CEFR>(CEFR.B1);
     const [isConfirming, setIsConfirming] = useState(false);
 
     const [resendEmail, setResendEmail] = useState('');
@@ -30,11 +31,8 @@ function UserConfirmationPage() {
             try {
                 const result = await (getConfirmationDetailsFn as any)({ data: { token } });
                 if (result.success && 'language' in result) {
-                    setDetails({ language: result.language, level: result.level });
-                    const variants = LANGUAGE_VARIANTS[result.language as Language];
-                    if (variants && variants.length > 0) {
-                        setSelectedVariant(variants[0]);
-                    }
+                    setSelectedLanguage(result.language as Language);
+                    setSelectedLevel(result.proficiencyLevel as CEFR);
                     setStatus('ready');
                 } else {
                     const errMsg = 'error' in result ? (result.error as string) : 'Failed to load confirmation details';
@@ -55,7 +53,8 @@ function UserConfirmationPage() {
             const result = await (confirmFn as any)({
                 data: {
                     token,
-                    languageVariant: selectedVariant,
+                    targetLanguage: selectedLanguage,
+                    level: selectedLevel
                 }
             });
             if (result.success) {
@@ -110,9 +109,9 @@ function UserConfirmationPage() {
             <Header user={null} />
 
             <div className="flex-grow flex items-center justify-center py-12">
-                <div className="w-full max-w-xl bg-white border border-stone-200 rounded-[2.5rem] p-10 md:p-14 shadow-xl text-center">
+                <div className="w-full max-w-xl bg-white border border-stone-200 rounded-[2.5rem] p-10 md:p-14 shadow-xl text-center transition-all duration-500">
                     {status === 'error' && (
-                        <div className="space-y-8">
+                        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <div className="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center mx-auto">
                                 <AlertCircle className="w-10 h-10 text-amber-500" />
                             </div>
@@ -170,72 +169,54 @@ function UserConfirmationPage() {
                         </div>
                     )}
 
-                    {status === 'ready' && details && (
-                        <div className="space-y-10">
+                    {status === 'ready' && (
+                        <div className="space-y-10 animate-in fade-in zoom-in-95 duration-500">
+                            <div className="w-16 h-16 bg-stone-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <Sparkles className="w-8 h-8 text-stone-900" />
+                            </div>
+
                             <div className="space-y-4">
-                                <h1 className="text-4xl font-light serif text-stone-800">Confirm Your auri Subscription</h1>
-                                <p className="text-stone-400 font-medium">Almost there! Just a few quick preferences for your daily lessons.</p>
+                                <h1 className="text-4xl font-light serif text-stone-800">Welcome Aboard!</h1>
+                                <p className="text-stone-400 font-medium">Confirm or adjust your settings before we start your adventure.</p>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4 text-left">
-                                <div className="p-5 bg-stone-50 rounded-2xl border border-stone-100 flex items-center gap-4">
-                                    <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center">
-                                        <Globe className="w-5 h-5 text-stone-400" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-stone-400 mb-0.5">Language</p>
-                                        <p className="font-semibold text-stone-700">{details.language}</p>
-                                    </div>
+                            <div className="space-y-12 py-4">
+                                <div className="space-y-4">
+                                    <LanguageSelector
+                                        selectedLanguage={selectedLanguage}
+                                        onLanguageChange={setSelectedLanguage}
+                                        className="text-left"
+                                    />
                                 </div>
-                                <div className="p-5 bg-stone-50 rounded-2xl border border-stone-100 flex items-center gap-4">
-                                    <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center">
-                                        <GraduationCap className="w-5 h-5 text-stone-400" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-stone-400 mb-0.5">Proficiency</p>
-                                        <p className="font-semibold text-stone-700">{details.level}</p>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div className="space-y-4 text-left">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-stone-400 ml-1">Preferred Dialect / Variant</label>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                    {LANGUAGE_VARIANTS[details.language as Language]?.map(variant => (
-                                        <button
-                                            key={variant}
-                                            onClick={() => setSelectedVariant(variant)}
-                                            className={`px-5 py-4 rounded-2xl text-sm font-semibold transition-all text-left border-2 ${selectedVariant === variant
-                                                ? 'bg-stone-900 border-stone-900 text-white shadow-md'
-                                                : 'bg-white border-stone-100 text-stone-600 hover:border-stone-200'
-                                                }`}
-                                        >
-                                            {variant}
-                                        </button>
-                                    ))}
+                                <div className="space-y-4">
+                                    <LevelSelector
+                                        selectedLevel={selectedLevel}
+                                        onLevelChange={setSelectedLevel}
+                                    />
                                 </div>
                             </div>
 
                             <button
                                 onClick={handleConfirm}
                                 disabled={isConfirming}
-                                className="group w-full px-8 py-5 bg-stone-900 text-white rounded-2xl font-semibold text-lg hover:bg-stone-800 transition-all flex items-center justify-center gap-3 shadow-xl active:translate-y-0.5 disabled:opacity-50"
+                                className="group w-full px-8 py-5 bg-stone-900 text-white rounded-2xl font-semibold text-lg hover:bg-stone-800 transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl active:translate-y-0.5 disabled:opacity-50"
                             >
-                                <span>{isConfirming ? 'Setting up...' : 'Confirm Subscription'}</span>
+                                <span>{isConfirming ? 'Finalizing...' : 'Confirm & Start Lessons'}</span>
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </button>
                         </div>
                     )}
 
                     {status === 'success' && (
-                        <div className="space-y-8 py-4">
+                        <div className="space-y-8 py-4 animate-in fade-in slide-in-from-top-4 duration-500">
                             <div className="w-24 h-24 bg-stone-900 rounded-full flex items-center justify-center mx-auto shadow-2xl">
                                 <CheckCircle2 className="w-12 h-12 text-white" />
                             </div>
                             <div className="space-y-3">
                                 <h1 className="text-4xl font-light serif text-stone-800">You're All Set!</h1>
                                 <p className="text-stone-500 text-lg leading-relaxed font-medium max-w-sm mx-auto">
-                                    Your email is confirmed. We're curating your first lesson now—it'll be in your inbox shortly.
+                                    Email confirmed. We've queued up your first lesson for <span className="text-stone-900 font-semibold">{selectedLanguage}</span>. It should arrive shortly.
                                 </p>
                             </div>
                             <button

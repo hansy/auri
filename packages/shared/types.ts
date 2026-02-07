@@ -1,14 +1,17 @@
 
 export enum Language {
-  ENGLISH = 'English',
-  SPANISH = 'Spanish',
+  ENGLISH_UK = 'English (UK)',
+  ENGLISH_USA = 'English (USA)',
+  SPANISH_SPAIN = 'Spanish (Spain)',
+  SPANISH_LATIN_AMERICA = 'Spanish (Latin America)',
   FRENCH = 'French',
   GERMAN = 'German',
   RUSSIAN = 'Russian',
   SWEDISH = 'Swedish',
   DUTCH = 'Dutch',
   FINNISH = 'Finnish',
-  PORTUGUESE = 'Portuguese',
+  PORTUGUESE_PORTUGAL = 'Portuguese (Portugal)',
+  PORTUGUESE_BRAZIL = 'Portuguese (Brazil)',
   INDONESIAN = 'Indonesian',
   ITALIAN = 'Italian'
 }
@@ -88,10 +91,10 @@ export interface LessonContent {
 
 export interface UserProfile {
   targetLanguage: Language;
-  level: CEFR;
+  nativeLanguage: Language;
+  proficiencyLevel: CEFR;
   streak: number;
   lastCompletedDate?: string;
-  domainIndex: number;
 }
 
 export interface ReflectionFeedback {

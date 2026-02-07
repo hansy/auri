@@ -22,10 +22,6 @@ export const CEFR_DESCRIPTIONS: Record<CEFR, string> = {
   [CEFR.C1]: 'Understands complex speech, including implied meaning and tone.',
 };
 
-export const LANGUAGE_VARIANTS: Record<Language, string[]> = LANGUAGES_DATA.reduce((acc, l) => {
-  acc[l.name as Language] = l.variants.map(v => v.name);
-  return acc;
-}, {} as Record<Language, string[]>);
 
 export const DOMAINS: ('personal' | 'public' | 'occupational')[] = ['personal', 'public', 'occupational'];
 
