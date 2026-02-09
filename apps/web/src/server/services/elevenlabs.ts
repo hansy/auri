@@ -15,7 +15,7 @@ const client = new ElevenLabsClient({
  * Strips dialect from BCP 47 language code to ISO 639-1.
  * e.g., "es-419" -> "es", "en-US" -> "en"
  */
-const toISO6391 = (code?: string): string | undefined => {
+export const toISO6391 = (code?: string): string | undefined => {
     if (!code) return undefined;
     return code.split('-')[0];
 };
@@ -88,5 +88,27 @@ export const generateDialogue = async (segments: DialogueSegment[], languageCode
     const stream = await createDialogue(segments, languageCode);
 
     return streamToBuffer(stream);
+};
+
+export const getConversationToken = async (): Promise<string> => {
+    if (!ELEVENLABS_API_KEY) {
+        throw new Error('ELEVENLABS_API_KEY is not set');
+    }
+
+    try {
+        const response = await fetch(`https://api.elevenlabs.io/v1/convai/conversation/get-signed-url?agent_id=${process.env.ELEVENLABS_AGENT_ID}`, {
+            headers: {
+                "xi-api-key": process.env.ELEVENLABS_API_KEY as string,
+            },
+        })
+        const json = await response.json()
+
+        console.log(json)
+
+        return json.signed_url;
+    } catch (error) {
+        console.error('Error generating conversation token:', error);
+        throw error;
+    }
 };
 

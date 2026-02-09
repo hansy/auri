@@ -73,6 +73,7 @@ export interface LessonContent {
   id: string;
   json: LessonJSON;
   audioBase64?: string;
+  audioUrl?: string;
   language: Language;
 }
 

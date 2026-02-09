@@ -43,6 +43,13 @@
       "when": 1770627139899,
       "tag": "0005_friendly_onslaught",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1770665760513,
+      "tag": "0006_material_harrier",
+      "breakpoints": true
     }
   ]
 }

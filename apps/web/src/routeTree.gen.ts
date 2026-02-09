@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LessonsLessonIdRouteImport } from './routes/lessons/$lessonId'
 import { Route as UsersConfirmTokenRouteImport } from './routes/users/confirm.$token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LessonsLessonIdRoute = LessonsLessonIdRouteImport.update({
+  id: '/lessons/$lessonId',
+  path: '/lessons/$lessonId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UsersConfirmTokenRoute = UsersConfirmTokenRouteImport.update({
@@ -25,27 +31,31 @@ const UsersConfirmTokenRoute = UsersConfirmTokenRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/lessons/$lessonId': typeof LessonsLessonIdRoute
   '/users/confirm/$token': typeof UsersConfirmTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/lessons/$lessonId': typeof LessonsLessonIdRoute
   '/users/confirm/$token': typeof UsersConfirmTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/lessons/$lessonId': typeof LessonsLessonIdRoute
   '/users/confirm/$token': typeof UsersConfirmTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/users/confirm/$token'
+  fullPaths: '/' | '/lessons/$lessonId' | '/users/confirm/$token'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/users/confirm/$token'
-  id: '__root__' | '/' | '/users/confirm/$token'
+  to: '/' | '/lessons/$lessonId' | '/users/confirm/$token'
+  id: '__root__' | '/' | '/lessons/$lessonId' | '/users/confirm/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LessonsLessonIdRoute: typeof LessonsLessonIdRoute
   UsersConfirmTokenRoute: typeof UsersConfirmTokenRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lessons/$lessonId': {
+      id: '/lessons/$lessonId'
+      path: '/lessons/$lessonId'
+      fullPath: '/lessons/$lessonId'
+      preLoaderRoute: typeof LessonsLessonIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/users/confirm/$token': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LessonsLessonIdRoute: LessonsLessonIdRoute,
   UsersConfirmTokenRoute: UsersConfirmTokenRoute,
 }
 export const routeTree = rootRouteImport
