@@ -1,6 +1,6 @@
 import { task } from "@trigger.dev/sdk/v3";
-import { generateDialogue } from "../services/elevenlabs";
-import { uploadToGCS } from "../services/storage";
+import { generateDialogueStream } from "../services/elevenlabs";
+import { streamToGCS } from "../services/storage";
 import { LessonService } from "../services/lessons";
 import { UserService } from "../services/users";
 
@@ -34,10 +34,10 @@ export const generateStoryAudioJob = task({
             };
         });
 
-        // Generate audio using text-to-dialogue API
-        const audioBuffer = await generateDialogue(dialogueSegments, user.targetLanguage);
+        // Generate audio stream and pipe directly to GCS
+        const audioStream = await generateDialogueStream(dialogueSegments, user.targetLanguage);
         const filename = `stories/${lesson.userId}/${lesson.id}.mp3`;
-        const gcsUri = await uploadToGCS(audioBuffer, filename, "audio/mpeg");
+        const gcsUri = await streamToGCS(audioStream, filename, "audio/mpeg");
 
         // 6. Save to DB via Service
 
