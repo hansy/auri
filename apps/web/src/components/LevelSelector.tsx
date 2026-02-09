@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { CEFR } from '@auri/shared/types';
 import { CEFR_LEVELS, CEFR_DESCRIPTIONS } from '@auri/shared/constants';
 import { Star, Info } from 'lucide-react';
-import { toast } from 'sonner';
 
 interface LevelSelectorProps {
     selectedLevel: CEFR;
@@ -17,12 +16,9 @@ export const LevelSelector: React.FC<LevelSelectorProps> = ({
 
     const handleLevelClick = (level: CEFR) => {
         onLevelChange(level);
-        if (level === CEFR.A0 || level === CEFR.A1) {
-            toast.info("Note: This service is optimized for A2+ learners. It may be quite challenging for absolute beginners.", {
-                duration: 5000,
-            });
-        }
     };
+
+    const isLowLevel = selectedLevel === CEFR.A0 || selectedLevel === CEFR.A1;
 
     return (
         <div className="w-full space-y-4">
@@ -46,8 +42,8 @@ export const LevelSelector: React.FC<LevelSelectorProps> = ({
                             onMouseEnter={() => setHoveredLevel(lvl)}
                             onMouseLeave={() => setHoveredLevel(null)}
                             className={`px-5 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${selectedLevel === lvl
-                                    ? 'bg-stone-900 text-white'
-                                    : 'bg-stone-50 text-stone-600 border border-stone-100 hover:border-stone-300'
+                                ? 'bg-stone-900 text-white'
+                                : 'bg-stone-50 text-stone-600 border border-stone-100 hover:border-stone-300'
                                 }`}
                         >
                             {lvl === CEFR.A2 && <Star className={`w-3.5 h-3.5 ${selectedLevel === lvl ? 'text-yellow-400 fill-yellow-400' : 'text-stone-400'}`} />}
@@ -67,6 +63,14 @@ export const LevelSelector: React.FC<LevelSelectorProps> = ({
                     </div>
                 ))}
             </div>
+
+            {isLowLevel && (
+                <div className="pt-2 animate-in fade-in slide-in-from-top-1 duration-300">
+                    <p className="text-[11px] font-medium text-amber-600 bg-amber-50 py-2 px-4 rounded-xl border border-amber-100">
+                        Note: Optimized for A2+ learners. This may be quite challenging at your level.
+                    </p>
+                </div>
+            )}
         </div>
     );
 };

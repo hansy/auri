@@ -36,6 +36,13 @@
       "when": 1770460691646,
       "tag": "0004_huge_inhumans",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1770627139899,
+      "tag": "0005_friendly_onslaught",
+      "breakpoints": true
     }
   ]
 }

@@ -14,7 +14,7 @@ interface CTABoxProps {
 
 const CTABox: React.FC<CTABoxProps> = ({ onStart, user }) => {
     const [selectedLanguage, setSelectedLanguage] = useState<Language>(Language.ENGLISH_USA);
-    const [selectedLevel, setSelectedLevel] = useState<CEFR>(CEFR.B1);
+    const [selectedLevel, setSelectedLevel] = useState<CEFR>(CEFR.A2);
     const [email, setEmail] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);

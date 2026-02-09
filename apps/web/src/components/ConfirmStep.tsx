@@ -14,7 +14,7 @@ const ConfirmStep: React.FC<ConfirmStepProps> = ({ token, onComplete }) => {
     const [status, setStatus] = useState<'loading' | 'preparing' | 'success' | 'error'>('loading');
     const [message, setMessage] = useState('Verifying your email...');
     const [selectedLanguage, setSelectedLanguage] = useState<Language>(Language.ENGLISH_USA);
-    const [selectedLevel, setSelectedLevel] = useState<CEFR>(CEFR.B1);
+    const [selectedLevel, setSelectedLevel] = useState<CEFR>(CEFR.A2);
 
     useEffect(() => {
         const fetchDetails = async () => {

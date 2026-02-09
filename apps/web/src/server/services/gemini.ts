@@ -18,7 +18,7 @@ export const generateLessonJson = async (language: Language, level: CEFR, domain
         .replace('{domain}', domain);
 
     const response = await ai.models.generateContent({
-        model: "gemini-1.5-pro-latest",
+        model: "gemini-3-pro-preview",
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         config: {
             responseMimeType: "application/json",

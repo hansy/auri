@@ -31,6 +31,6 @@ export const lessons = pgTable('lessons', {
     title: text('title').notNull(),
     proficiencyLevel: proficiencyLevelEnum('proficiency_level').notNull(),
     audioUrl: text('audio_url'), // Link to stored audio if we store it, or just base64 in json? Let's keep a field.
-    sentAt: timestamp('sent_at').defaultNow().notNull(),
+    sentAt: timestamp('sent_at'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
 });

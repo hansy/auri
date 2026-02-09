@@ -19,7 +19,7 @@ function UserConfirmationPage() {
     const navigate = useNavigate();
     const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'ready'>('loading');
     const [selectedLanguage, setSelectedLanguage] = useState<Language>(Language.ENGLISH_USA);
-    const [selectedLevel, setSelectedLevel] = useState<CEFR>(CEFR.B1);
+    const [selectedLevel, setSelectedLevel] = useState<CEFR>(CEFR.A2);
     const [isConfirming, setIsConfirming] = useState(false);
 
     const [resendEmail, setResendEmail] = useState('');

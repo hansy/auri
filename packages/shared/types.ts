@@ -39,46 +39,34 @@ export type Domain = 'personal' | 'public' | 'occupational';
 
 export interface QuestionSpec {
   id: string;
-  question: string;
+  text: string;
   intent: 'literal' | 'relational' | 'pragmatic';
+  key_points: string[];
+}
+
+export interface StorySpeaker {
+  id: string;
+  gender: 'male' | 'female';
+  stability: 'creative' | 'natural' | 'robust';
+  voiceId?: string; // Assigned post-generation
+}
+
+export interface StorySegment {
+  speaker_id: string;
+  text: string;
+  break_after_ms?: number;
 }
 
 export interface LessonJSON {
-  storySpec: {
-    level: CEFR;
-    domain: Domain;
-    scenario_family: string;
-    cast_count: number;
-    setting: string;
-    communicative_goal: string;
-    mild_conflict: string | null;
-    discourse_shape: string;
-    length_seconds: number;
-  };
-  dictation: {
-    title: string;
-    speakers: string[];
-    script: string;
-    chunking: {
-      chunks: string[];
-      pause_ms_between_chunks: number;
-    };
-    audio: {
-      target_wpm: number;
-      pauses_between_sentences_ms: number;
-    };
-  };
-  questions: {
-    script: QuestionSpec[];
-  };
-  reviewTranscript: {
-    story: string;
-    questions: string[];
-  };
-  difficulty: {
-    level: CEFR;
-    knobs: Record<string, string | number>;
-  };
+  title: string;
+  pov: 'first' | 'third';
+  level: 'A2' | 'B1' | 'B2' | 'C1';
+  domain: Domain;
+  scenario_family: string;
+  is_dialogue: boolean;
+  speakers: StorySpeaker[];
+  segments: StorySegment[];
+  questions: QuestionSpec[];
 }
 
 export interface LessonContent {

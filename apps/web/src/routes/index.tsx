@@ -40,7 +40,7 @@ function App() {
     setIsLoading(true);
     try {
       const language = selectedLanguage || user?.targetLanguage || Language.ENGLISH_USA;
-      const proficiencyLevel = selectedLevel || user?.proficiencyLevel || CEFR.B1; // Renamed 'level' to 'proficiencyLevel'
+      const proficiencyLevel = selectedLevel || user?.proficiencyLevel || CEFR.A2; // Renamed 'level' to 'proficiencyLevel'
       // Removed domainIndex and domain logic as per instruction
 
       const newLesson = await generateDailyLesson(language, proficiencyLevel); // Removed domain parameter
@@ -107,7 +107,7 @@ function App() {
       <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center bg-stone-50">
         <Loader2 className="w-12 h-12 mb-4 animate-spin text-stone-400" />
         <h2 className="text-2xl font-light serif text-stone-600">Curating your lesson...</h2>
-        <p className="mt-2 text-stone-400">Strictly following CEFR {user?.proficiencyLevel || 'B1'} standards.</p>
+        <p className="mt-2 text-stone-400">Strictly following CEFR {user?.proficiencyLevel || 'A2'} standards.</p>
       </div>
     );
   }
