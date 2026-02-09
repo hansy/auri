@@ -4,16 +4,12 @@ import { getConversationTokenFn } from '@/server/functions/lessons';
 import { Button } from '@/components/ui/button';
 import { Mic, Square, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { LessonJSON } from '@auri/shared/types';
+import { LessonContent } from '@auri/shared/types';
 import { useServerFn } from '@tanstack/react-start';
 import { useQuery } from '@tanstack/react-query';
 
 interface ComprehensionStepProps {
-    lesson: {
-        contentJson: LessonJSON;
-        language: string;
-        proficiencyLevelGuideline: string;
-    };
+    lesson: LessonContent;
     onNext: () => void;
 }
 
@@ -36,22 +32,15 @@ export function ComprehensionStep({ lesson, onNext }: ComprehensionStepProps) {
         queryFn: () => getConversationToken(),
     })
 
-    // useEffect(() => {
-    //     const getMicPermission = async () => {
-    //         await navigator.mediaDevices.getUserMedia({ audio: true });
-    //     }
-    //     getMicPermission();
-    // }, [])
-
     const startConversation = useCallback(async () => {
         console.log(data)
         if (!data?.success) return;
 
-        const { contentJson, language, proficiencyLevelGuideline } = lesson;
-        const voiceId = contentJson.speakers?.[0]?.voiceId;
+        const { json, language, proficiencyLevelGuideline } = lesson;
+        const voiceId = json.speakers?.[0]?.voiceId;
         console.log(voiceId)
-        const story = contentJson.segments.map(seg => seg.text).join('\n');
-        const questions = JSON.stringify(contentJson.questions);
+        const story = json.segments.map(seg => seg.text).join('\n');
+        const questions = JSON.stringify(json.questions);
 
         try {
             console.log('Starting conversation...')
@@ -70,7 +59,7 @@ export function ComprehensionStep({ lesson, onNext }: ComprehensionStepProps) {
                     }
                 },
                 dynamicVariables: {
-                    proficiencyLevelGuideline,
+                    proficiencyLevelGuideline: proficiencyLevelGuideline || '',
                     story,
                     questions,
                 },

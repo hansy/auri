@@ -56,11 +56,13 @@ export const getLessonFn = createServerFn({ method: "GET" })
                 console.warn(`Could not read QA level instructions for ${level}`);
             }
 
+            const { contentJson, ...restLesson } = lesson;
+
             return {
                 success: true,
                 lesson: {
-                    ...lesson,
-                    contentJson: lesson.contentJson as unknown as LessonJSON,
+                    ...restLesson,
+                    json: contentJson as unknown as LessonJSON,
                     audioUrl,
                     language: toISO6391(result.targetLanguage) ?? 'en',
                     proficiencyLevelGuideline,

@@ -37,7 +37,7 @@ export function LessonWizard({ lesson }: LessonWizardProps) {
             key: 'dictation',
         },
         {
-            component: <ComprehensionStep lesson={lesson as any} onNext={nextStep} />,
+            component: <ComprehensionStep lesson={lesson} onNext={nextStep} />,
             key: 'comprehension',
         },
         {

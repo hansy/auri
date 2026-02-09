@@ -75,6 +75,7 @@ export interface LessonContent {
   audioBase64?: string;
   audioUrl?: string;
   language: Language;
+  proficiencyLevelGuideline?: string;
 }
 
 export interface UserProfile {
