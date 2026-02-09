@@ -1,12 +1,8 @@
 import { Storage } from '@google-cloud/storage';
-const { auth } = require('google-auth-library');
+import { parseGCPCredentials } from '../utils/env';
 
-const GCS_STRING_KEY = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-const jsonKey = JSON.parse(GCS_STRING_KEY || '{}');
-
-const storage = new Storage({
-    authClient: auth.fromJSON(jsonKey),
-});
+const credentials = parseGCPCredentials(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+const storage = new Storage({ credentials });
 const BUCKET_NAME = process.env.GCS_BUCKET_NAME || 'auri-content';
 
 export const uploadToGCS = async (buffer: Buffer, filename: string, mimeType: string): Promise<string> => {
@@ -16,6 +12,7 @@ export const uploadToGCS = async (buffer: Buffer, filename: string, mimeType: st
     await file.save(buffer, {
         contentType: mimeType,
         resumable: false,
+        validation: false, // Disable validation to prevent Bun stream crashes
     });
 
     return `gs://${BUCKET_NAME}/${filename}`;

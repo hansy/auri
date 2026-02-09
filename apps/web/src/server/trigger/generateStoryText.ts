@@ -5,8 +5,8 @@ import { LessonService } from "../services/lessons";
 import { VoiceService } from "../services/voices";
 import { StorySpeaker } from "@auri/shared";
 
-export const generateStoryJob = task({
-    id: "generate-story",
+export const generateStoryTextJob = task({
+    id: "generate-story-text",
     run: async (payload: { userId: string }) => {
         const { userId } = payload;
 
