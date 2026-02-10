@@ -1,44 +1,58 @@
 import { task } from "@trigger.dev/sdk/v3";
-// import { db } from "../db/index";
-// import { users, lessons } from "../db/schema";
-// import { eq } from "drizzle-orm";
-// import { generateLessonJson } from "../services/gemini";
-// import { textToSpeech } from "../services/elevenlabs";
-// import { DOMAINS } from "@auri/shared";
-
+import { generateStoryTextJob } from "./generateStoryText";
+import { generateStoryAudioJob } from "./generateStoryAudio";
+import { sendEmailTask } from "./sendEmail";
+import { UserService } from "../services/users";
+import { LessonService } from "../services/lessons";
 
 export const generateLessonTask = task({
     id: "generate-daily-lesson",
-    run: async (_payload: { userId: string }) => {
-        // const { userId } = payload;
+    run: async (payload: { userId: string, isWelcome?: boolean }) => {
+        const { userId, isWelcome } = payload;
 
-        // const [user] = await db.select().from(users).where(eq(users.id, userId));
-        // if (!user) {
-        //     throw new Error(`User ${userId} not found`);
-        // }
+        // 1. Get User
+        const user = await UserService.getUserById(userId);
+        if (!user) {
+            throw new Error(`User ${userId} not found`);
+        }
 
-        // const domain = DOMAINS[user.domainIndex % DOMAINS.length];
+        // 2. Generate Story Text
+        const textResult = await generateStoryTextJob.triggerAndWait({ userId });
 
-        // const lessonJson = await generateLessonJson(user.targetLanguage as any, user.level as any, domain as any);
-        // const audioContent = await textToSpeech(lessonJson.dictation.script);
+        if (!textResult.ok) {
+            throw new Error(`Failed to generate story text: ${textResult.error}`);
+        }
 
-        // // Note: In a real app, you'd upload audioContent to an S3 bucket and get a URL.
-        // // For now, we'll just save the JSON content.
+        const { storyId } = textResult.output;
 
-        // await db.insert(lessons).values({
-        //     userId: user.id,
-        //     contentJson: lessonJson,
-        // });
+        // 3. Generate Audio
+        const audioResult = await generateStoryAudioJob.triggerAndWait({ lessonId: storyId });
 
-        // const lessonUrl = `${process.env.FRONTEND_URL}/lesson/${userId}`;
-        // const { sendEmailTask } = await import("./sendEmail");
-        // await sendEmailTask.trigger({
-        //     to: user.email,
-        //     templaate: "DailyLessonEmail",
-        //     props: { title: lessonJson.dictation.title, lessonUrl },
-        // });
+        if (!audioResult.ok) {
+            throw new Error(`Failed to generate story audio: ${audioResult.error}`);
+        }
 
+        // 4. Send Email
+        // We need to fetch the lesson again or just pass the title if we have it. 
+        // generateStoryTextJob returns storyId, but not title.
+        // Let's fetch the lesson to get the title.
+        const lesson = await LessonService.getLessonById(storyId);
+        if (!lesson) {
+            throw new Error(`Lesson ${storyId} not found after generation`);
+        }
 
-        return { success: true };
+        const lessonUrl = `${process.env.VITE_HOST}/lessons/${lesson.id}`;
+
+        await sendEmailTask.trigger({
+            to: user.email,
+            template: "DailyLessonEmail",
+            props: {
+                title: lesson.title,
+                lessonUrl,
+                isWelcome
+            },
+        });
+
+        return { success: true, lessonId: storyId };
     },
 });

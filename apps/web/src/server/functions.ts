@@ -122,6 +122,7 @@ export const confirmFn = createServerFn({ method: "POST" })
             // Trigger welcome lesson generation
             await tasks.trigger<typeof generateLessonTask>("generate-daily-lesson", {
                 userId: confirmation.userId,
+                isWelcome: true
             });
 
             return { success: true, message: 'Email confirmed! Your first lesson is being prepared.' };

@@ -25,12 +25,17 @@ export const sendEmailTask = task({
 
         switch (template) {
             case "ConfirmEmail":
-                reactElement = ConfirmEmail(props);
+                reactElement = ConfirmEmail(props as ConfirmEmailProps);
                 subject = subject || EMAIL_CONFIG.subjects.ConfirmEmail;
                 break;
             case "DailyLessonEmail":
-                reactElement = DailyLessonEmail(props);
-                subject = subject || EMAIL_CONFIG.subjects.DailyLessonEmail(props.title);
+                const dailyProps = props as DailyLessonEmailProps;
+                reactElement = DailyLessonEmail(dailyProps);
+                if (!subject) {
+                    subject = dailyProps.isWelcome
+                        ? "Welcome to auri! Here is your first lesson"
+                        : EMAIL_CONFIG.subjects.DailyLessonEmail(dailyProps.title);
+                }
                 break;
             default:
                 throw new Error(`Unknown email template: ${template}`);

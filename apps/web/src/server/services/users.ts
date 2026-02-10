@@ -1,6 +1,6 @@
 import { db } from "../db";
 import { users, emailConfirmations } from "../db/schema";
-import { eq, and, gt } from "drizzle-orm";
+import { eq, and, gt, desc } from "drizzle-orm";
 import { CEFR } from "@auri/shared/types";
 
 function normalizeEmail(email: string): string {
@@ -70,5 +70,12 @@ export class UserService {
             isConfirmed: false,
         }).returning();
         return user;
+    }
+
+    static async getConfirmedUsers() {
+        return await db.select()
+            .from(users)
+            .where(eq(users.isConfirmed, true))
+            .orderBy(desc(users.createdAt));
     }
 }

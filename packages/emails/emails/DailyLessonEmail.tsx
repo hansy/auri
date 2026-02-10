@@ -14,19 +14,26 @@ import {
 export interface DailyLessonEmailProps {
     title: string;
     lessonUrl: string;
+    isWelcome?: boolean;
 }
 
 export const DailyLessonEmail = ({
     title,
     lessonUrl,
+    isWelcome,
 }: DailyLessonEmailProps) => (
     <Html>
         <Head />
-        <Preview>Your auri Lesson: {title}</Preview>
+        <Preview>{isWelcome ? "Welcome on board! Here is your first lesson" : `Your auri Lesson: ${title}`}</Preview>
         <Body style={main}>
             <Container style={container}>
-                <Heading style={h1}>Today's auri Lesson: {title}</Heading>
-                <Text style={text}>Your new lesson is ready! Take a few minutes to practice your listening and dictation.</Text>
+                <Heading style={h1}>{isWelcome ? "Welcome to auri!" : `Today's auri Lesson: ${title}`}</Heading>
+                <Text style={text}>
+                    {isWelcome
+                        ? "We're excited to have you! Here is your first generated lesson to get you started."
+                        : "Your new lesson is ready! Take a few minutes to practice your listening and dictation."
+                    }
+                </Text>
                 <Section style={section}>
                     <Link style={link} href={lessonUrl}>
                         Start Lesson
