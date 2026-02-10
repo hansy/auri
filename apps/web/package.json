@@ -6,11 +6,12 @@
     "dev": "vite dev --port 3000",
     "db:generate": "drizzle-kit generate --config ./drizzle.dev.config.ts",
     "db:migrate:dev": "drizzle-kit migrate --config ./drizzle.dev.config.ts",
+    "db:migrate:prod": "drizzle-kit migrate --config ./drizzle.prod.config.ts",
     "trigger": "bunx trigger.dev dev",
     "build": "vite build && tsc --noEmit",
     "preview": "vite preview",
     "test": "vitest run",
-    "deploy": "bun run build && wrangler deploy",
+    "deploy": "bun run build && wrangler deploy --env production",
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
@@ -42,6 +43,7 @@
     "@trigger.dev/sdk": "4.3.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.4",
     "drizzle-orm": "^0.45.1",
     "framer-motion": "^12.34.0",
     "google-auth-library": "^10.5.0",

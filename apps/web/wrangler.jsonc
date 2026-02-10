@@ -11,5 +11,17 @@
             "pattern": "hearauri.com",
             "custom_domain": true
         }
-    ]
+    ],
+    "env": {
+        "production": {
+            "vars": {
+                "VITE_HOST": "https://hearauri.com"
+            }
+        },
+        "development": {
+            "vars": {
+                "VITE_HOST": "http://localhost:3000"
+            }
+        }
+    }
 }
