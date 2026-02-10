@@ -5,6 +5,7 @@ import viteReact from '@vitejs/plugin-react'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'url'
+import { cloudflare } from '@cloudflare/vite-plugin'
 
 const config = defineConfig({
   resolve: {
@@ -13,6 +14,7 @@ const config = defineConfig({
     },
   },
   plugins: [
+    cloudflare({ viteEnvironment: { name: 'ssr' } }),
     devtools({
       eventBusConfig: {
         enabled: false

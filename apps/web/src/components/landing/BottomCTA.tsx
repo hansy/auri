@@ -1,11 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
-interface BottomCTAProps {
-    onStart: () => void;
-}
-
-const BottomCTA: React.FC<BottomCTAProps> = ({ }) => {
+const BottomCTA: React.FC = ({ }) => {
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };

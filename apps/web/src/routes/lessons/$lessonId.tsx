@@ -11,6 +11,25 @@ export const Route = createFileRoute('/lessons/$lessonId')({
         }
         return { lesson: result.lesson };
     },
+    head: ({ loaderData }) => ({
+        meta: [
+            {
+                title: `${loaderData?.lesson?.json?.title || 'Daily Lesson'} - auri`,
+            },
+            {
+                name: 'description',
+                content: `Daily immersion lesson: ${loaderData?.lesson?.json?.title}. Practice ${loaderData?.lesson?.language} at ${loaderData?.lesson?.json?.level} level.`,
+            },
+            {
+                property: 'og:title',
+                content: `${loaderData?.lesson?.json?.title || 'Daily Lesson'} - auri`,
+            },
+            {
+                property: 'og:description',
+                content: `Daily immersion lesson: ${loaderData?.lesson?.json?.title}. Practice ${loaderData?.lesson?.language} at ${loaderData?.lesson?.json?.level} level.`,
+            },
+        ],
+    }),
     component: LessonPage,
     pendingComponent: () => (
         <div className="flex items-center justify-center min-h-screen">

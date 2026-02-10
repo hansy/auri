@@ -11,6 +11,25 @@ import { LanguageSelector } from '../../components/LanguageSelector';
 import { LevelSelector } from '../../components/LevelSelector';
 
 export const Route = createFileRoute('/users/confirm/$token')({
+    head: () => ({
+        meta: [
+            {
+                title: 'Confirm Your Email - auri',
+            },
+            {
+                name: 'description',
+                content: 'Confirm your email and set up your language learning preferences to start your daily lessons.',
+            },
+            {
+                property: 'og:title',
+                content: 'Confirm Your Email - auri',
+            },
+            {
+                property: 'og:description',
+                content: 'Confirm your email and set up your language learning preferences to start your daily lessons.',
+            },
+        ],
+    }),
     component: UserConfirmationPage,
 });
 
