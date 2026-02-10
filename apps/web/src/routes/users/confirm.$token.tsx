@@ -125,7 +125,7 @@ function UserConfirmationPage() {
 
     return (
         <main className="max-w-6xl mx-auto min-h-screen px-6 py-12 md:py-24 flex flex-col">
-            <Header user={null} />
+            <Header />
 
             <div className="flex-grow flex items-center justify-center py-12">
                 <div className="w-full max-w-xl bg-white border border-stone-200 rounded-[2.5rem] p-10 md:p-14 shadow-xl text-center transition-all duration-500">

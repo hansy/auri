@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Play, Pause } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface DictationStepProps {

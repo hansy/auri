@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useConversation } from '@elevenlabs/react';
 import { getConversationTokenFn } from '@/server/functions/lessons';
 import { Button } from '@/components/ui/button';
@@ -33,21 +33,15 @@ export function ComprehensionStep({ lesson, onNext }: ComprehensionStepProps) {
     })
 
     const startConversation = useCallback(async () => {
-        console.log(data)
         if (!data?.success) return;
 
         const { json, language, proficiencyLevelGuideline } = lesson;
         const voiceId = json.speakers?.[0]?.voiceId;
-        console.log(voiceId)
         const story = json.segments.map(seg => seg.text).join('\n');
         const questions = JSON.stringify(json.questions);
 
         try {
-            console.log('Starting conversation...')
-            console.log('gettin permission')
             await navigator.mediaDevices.getUserMedia({ audio: true });
-            console.log('got permission')
-            console.log(data.token)
             await conversation.startSession({
                 signedUrl: data.token,
                 overrides: {

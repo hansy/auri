@@ -103,8 +103,6 @@ export const getConversationToken = async (): Promise<string> => {
         })
         const json = await response.json()
 
-        console.log(json)
-
         return json.signed_url;
     } catch (error) {
         console.error('Error generating conversation token:', error);

@@ -77,9 +77,7 @@ export const getLessonFn = createServerFn({ method: "GET" })
 export const getConversationTokenFn = createServerFn({ method: "POST" })
     .handler(async () => {
         try {
-            console.log('Getting conversation token...');
             const token = await getConversationToken();
-            console.log(token)
             return { success: true as const, token };
         } catch (e) {
             console.error('Error getting conversation token:', e);

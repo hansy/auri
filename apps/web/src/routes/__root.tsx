@@ -5,7 +5,6 @@ import { Toaster } from '../components/ui/sonner'
 import {
   QueryClient,
   QueryClientProvider,
-  useQuery,
 } from '@tanstack/react-query'
 
 const queryClient = new QueryClient()

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Language, CEFR } from '@auri/shared/types';
-import { Mail, ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { subscribeFn } from '../../server/functions';
 import { toast } from 'sonner';
 import { SubscriptionSchema } from '@auri/shared/validation';
